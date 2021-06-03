@@ -1,5 +1,12 @@
 # Team agreement
 
+## Team Members
+
+* Mohammad Za'areer
+* Mohammad Khaza'li
+* Areen Jaradat
+* Omar Ramadan
+
 ## Conflict Plan
 
 Before starting the project, each member should explain any concerns or viewpoints they consider and want other members to respect.
@@ -20,7 +27,7 @@ We will use the provided Trello board to assign tasks. Each group member will wo
 
 ## Git Process
 
-We will create a development branch that will be only for staging, and when the functionality is fully implemented and it is ready to go live, we will make a pull request to the main branch. 
+We will create a development branch that will be only for staging, and when the functionality is fully implemented and it is ready to go live, we will make a pull request to the main branch.
 
 Each one, in the beginning, will be working on their tasks locally, then each one will push their work on a separate branch, and then they will make a pull request to the development branch.
 
