@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request</title>
+</head>
+<body>
+    <h1>Request</h1>
+    <section>
+        <%searchResults.forEach(result=>{%>
+            <div>
+           <p><%=result.name%></p>
+           <p><%=result.policyrequested%></p>
+           <p><%=result.personaInfo%></p>
+           <p><%=result.medicalhistory%></p>
+          <button type="submit">reject</button>
+          <button type="submit">approve</button>
+    </div>
+            <%})%>
+    </section>
+</body>
+</html>
