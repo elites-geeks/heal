@@ -7,6 +7,9 @@
     "test": "jest --coverage --verbose",
     "start": "node index.js"
   },
+  "jest":{
+    "testEnvironment":"node"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/elites-geeks/heal.git"
@@ -26,6 +29,7 @@
     "express": "^4.17.1",
     "jquery": "^3.6.0",
     "jsonwebtoken": "^8.5.1",
+    "method-override": "^3.0.0",
     "mongoose": "^5.12.12",
     "pg": "^8.6.0",
     "socket.io": "^4.1.2",
