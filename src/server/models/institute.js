@@ -50,4 +50,4 @@ const healthCareInstitutes = mongoose.model('healthCareInstitutes', healthCareIn
 const insuranceCompanies = mongoose.model('insuranceCompanies', insuranceCompanySchema);
 const polycies = mongoose.model('polycies', policySchema);
 
-module.exports= {hospitals, healthCareInstitutes, insuranceCompanies};
+module.exports= {hospitals, healthCareInstitutes, insuranceCompanies,polycies};
