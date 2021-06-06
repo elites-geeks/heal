@@ -2,7 +2,7 @@
 
 const bcrypt = require('bcrypt');
 const base64 = require('base-64');
-const Users = require('../models/users-model');
+const Users = require('../../server/models/user');
 
 async function basicAuthentication (req, res, next)  {
 
@@ -28,17 +28,18 @@ async function basicAuthentication (req, res, next)  {
          - bcrypt does this by re-encrypting the plaintext password and comparing THAT
       3. Either we're valid or we throw an error
     */
-  try {
-    const user = await Users.findOne({ username: username });
-    const valid = await bcrypt.compare(password, user.password);
-    if (valid) {
-      req.user = user;
-      next();
-    }
-    else {
-      next('the password not correct');
-    }
-  } catch (error) { res.status(403).send('the username not correct'); }
+  // try {
+  //   const user = await Users.findOne({ username: username });
+  //   const valid = await bcrypt.compare(password, user.password);
+  //   if (valid) {
+  //     req.user = user;
+  //     req.cookie('user' , user);
+  //     next();
+  //   }
+  //   else {
+  //     next('the password not correct');
+  //   }
+  // } catch (error) { res.status(403).send('the username not correct'); }
   
 }
 

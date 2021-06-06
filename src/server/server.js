@@ -6,7 +6,7 @@ const path = require('path');
 const superagent = require('superagent');
 const methodOverride = require('method-override');
 const morgan = require('morgan');
-
+const basicAuth = require('../middlewares/auth/basic');
 const notFoundHandler = require('../middlewares/err/404');
 
 const errorHandler = require('../middlewares/err/500.js');
@@ -32,7 +32,15 @@ const doctor=require('../server/routes/doctor.js');
 const employee=require('../server/routes/employee');
 
 app.get('/', (req, res) => {
-  res.render('pages/home');
+  res.sendFile('../../public/home.html');
+});
+// app.post('/signin',basicAuth,(req,res)=>{
+//   const userRole = req.user.field? req.user.role+'/'+req.user.field : req.user.role;
+//   res.redirect(`/${userRole}`)
+// });
+app.post('/signin',(req,res)=>{
+  console.log(req.headers.authorization);
+
 });
 
 app.use('/client',client);

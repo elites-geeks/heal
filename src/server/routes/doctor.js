@@ -6,7 +6,7 @@ const doctorRoute = express.Router();
 
 doctorRoute.get('/', dashboard);
 doctorRoute.get('/diagnosis', diagnosis);
-doctorRoute.get('/diagnosis', diagnosis);
+doctorRoute.post('/diagnosis', diagnosis);
 doctorRoute.get('/visit/doctor', selfVisit);
 
 

@@ -10,13 +10,12 @@ const adminSchema = mongoose.Schema({
     name: { 
         firstname: String,
         lastname: String,
-        required: true
     },
     username: { type: String, required: true },
     password: { type: String, required: true },
     date_of_birth: {type: Date, required: true},
     phone_number: {type: Number, required: true},
-    gender: {enum: ['male', 'female'], required: true},
+    gender: {type:String,enum: ['male', 'female'], required: true},
     img: {type: Buffer, required:true},
     email: {type: String}
 });
@@ -26,13 +25,12 @@ const patientSchema = mongoose.Schema({
     name: { 
         firstname: String,
         lastname: String,
-        required: true
     },
     username: { type: String, required: true },
     password: { type: String, required: true },
     date_of_birth: {type: Date, required: true},
     phone_number: {type: Number, required: true},
-    gender: {enum: ['male', 'female'], required: true},
+    gender: {type:String, enum: ['male', 'female'], required: true},
     img: {type: Buffer, required:true},
     email: {type: String}, 
     token: {type: String, required:true}
@@ -43,13 +41,12 @@ const doctorSchema = mongoose.Schema({
     name: { 
         firstname: String,
         lastname: String,
-        required: true
     },
     username: { type: String, required: true },
     password: { type: String, required: true },
     date_of_birth: {type: Date, required: true},
     phone_number: {type: Number, required: true},
-    gender: {enum: ['male', 'female'], required: true},
+    gender: {type:String, enum: ['male', 'female'], required: true},
     img: {type: Buffer, required:true},
     email: {type: String},
     specialty: { type: String, required: true },
@@ -64,12 +61,11 @@ const accountantSchema = mongoose.Schema({
     name: { 
         firstname: String,
         lastname: String,
-        required: true
     },
     username: { type: String, required: true },
     password: { type: String, required: true },
     date_of_birth: {type: Date, required: true},
-    gender: {enum: ['male', 'female'], required: true},
+    gender: {type:String, enum: ['male', 'female'], required: true},
     phone_number: {type: Number, required: true},
     img: {type: Buffer, required:true},
     email: {type: String},
@@ -81,13 +77,12 @@ const medicalStaffSchema = mongoose.Schema({
     name: { 
         firstname: String,
         lastname: String,
-        required: true
     },
     username: { type: String, required: true },
     password: { type: String, required: true },
     date_of_birth: {type: Date, required: true},
     phone_number: {type: Number, required: true},
-    gender: {enum: ['male', 'female'], required: true},
+    gender: {type:String, enum: ['male', 'female'], required: true},
     img: {type: Buffer, required:true},
     email: {type: String},
     institute: {type: String, required:true}
@@ -98,7 +93,6 @@ const insuranceRepSchema = mongoose.Schema({
     name: { 
         firstname: String,
         lastname: String,
-        required: true
     },
     username: { type: String, required: true },
     password: { type: String, required: true },
@@ -113,23 +107,23 @@ const insuranceRepSchema = mongoose.Schema({
 
 
 // Pre-Save Hook
-usersSchema.pre("save", async function(next) {
-    this.password = await bcrypt.hash(this.password, 10);
-    next();
-})
+// usersSchema.pre("save", async function(next) {
+//     this.password = await bcrypt.hash(this.password, 10);
+//     next();
+// })
 
 // Authenticate user using bcrypt
-userSchema.statics.authenticateToken = async function(token) {
-    let payload = jwt.verify(token, SECRET);
-    return await this.findOne({username: payload.username});
-}
+// userSchema.statics.authenticateToken = async function(token) {
+//     let payload = jwt.verify(token, SECRET);
+//     return await this.findOne({username: payload.username});
+// }
 
 // Create a mongoose schema
-const Admins = mongoose.model('admins', adminSchema);
-const Patients = mongoose.model('patients', patientSchema);
-const Staff = mongoose.model('saff', medicalStaffSchema);
-const Doctors = mongoose.model('doctors', doctorSchema);
-const Acountants = mongoose.model('doctors', accountantSchema);
-const InsuranceRepresentatives = mongoose.model('users', insuranceRepSchema);
+const Admin = mongoose.model('Admin', adminSchema);
+const Client = mongoose.model('Client', patientSchema);
+const Staff = mongoose.model('Staff', medicalStaffSchema);
+const Doctor = mongoose.model('Doctor', doctorSchema);
+const Acountant = mongoose.model('Accountant', accountantSchema);
+const InsRep = mongoose.model('InsRep', insuranceRepSchema);
 
-module.exports = {Admins, Doctors, Staff, Acountants, InsuranceRepresentatives, Patients};
+module.exports = {Admin, Doctor, Staff, Acountant, InsRep, Client};
