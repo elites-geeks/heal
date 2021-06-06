@@ -45,10 +45,9 @@ function run(PORT) {
     console.log('Server up on ', PORT);
   });
 }
+app.use('*', notFoundHandler);
+app.use(errorHandler);
 module.exports = {
   run,
   app,
 };
-
-app.use('*', notFoundHandler);
-app.use(errorHandler);
