@@ -1,13 +1,13 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const {Admins, Doctors, Staff, Acountants, InsuranceRepresentatives, Patients} = require('/user');
+const {Doctors, Patients} = require('/user');
 
 const reservationSchema = mongoose.Schema({
     doctor: {type: Doctors, required: true},
-    patient: {type: patient, required:true},
-    time: {type: Date, required:true},
-    data: {type: String} 
+    patient: {type: Patients, required:true},
+    time: {type: String, required:true},
+    data: {type: String}
 });
 
 const drugSchema = mongoose.Schema({
@@ -30,9 +30,10 @@ const testSchema  = mongoose.Schema({
     name: {type: String, required: true},
     price: {type: Number, required: true},
     notes: {type: Number, required: true},
-    timestart: {type: Date, required: true},
-    timeend: {type: Date, required: true},
-    expected_time: {type: String, required: true}
+    timestart: {type: String, required: true},
+    timeend: {type: String, required: true},
+    expected_time: {type: String, required: true},
+    status: {enum: ['pending', 'paid', 'active'], required:true}
 });
 
 
