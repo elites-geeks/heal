@@ -1,62 +1,63 @@
 'use strict';
 
 const express = require('express');
-
+const pg = require('pg');
+const client = new pg.Client(process.env.DATABASE_URL);
+client.connect().then(()=>{
+console.log('connected');
+});
+client.on('error', err=>{
+  console.log("PG error");
+});
 const clientRoute = express.Router();
+// Routes
+clientRoute.post('/register' , registerHandler);
+// clientRoute.post('/new-visit/self', selfVisitHandler);
 
-clientRoute.get('/', dashboard);
-clientRoute.get('/openvisit', newvisit);
-clientRoute.get('/openvisit/doctor', doctorVisit);
-clientRoute.get('/openvisit/self', selfVisit);
-clientRoute.post('/openvisit/self', reserveVisit);
-// clientRoute.get('/procedures/ready', selfVisit);
-// clientRoute.get('/procedures/pending', selfVisit);
-//clientRoute.get('/procedures', procedures);
-clientRoute.get('/appointments/search', appointments);
-clientRoute.post('/appointments/search', reserve);
-clientRoute.get('/appointments/reserved', appointmentsReserved);
-clientRoute.get('/subscribe-to-insurance', subscribeToInsurance);
-function dashboard(req,res){
-  res.status(200).render('client/dashboard.ejs');
-  //res.send('sfasfa');
-}
-function newvisit(req,res){
-  res.status(200).render('client/visit.ejs');
+// Routes handlers
+async function registerHandler(req,res){
+  // console.log(req.body);
+  // try{
 
+    // const SQL = 'SELECT username from patient where username=$1 returning *;';
+    // client.query(SQL,[req.body.username]).then(data=>{
+    //   console.log('hello');
+    // }).catch(err =>{
+    //   console.log(err.message);
+    // });
+    // if(data.username){
+    //   console.log("User name is already exist");
+    //   res.end();
+    // }else{
+      console.log(client.query);
+      const body = req.body;
+      console.log(body);
+      const SQL = `INSERT INTO patient (firstName, lastName , dateOfBirth , email , phoneNumber, image, insuranceState, role , country , password) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning *;`;
+      client.query(SQL,[body.firstName, body.lastName, body.dataOfBirth, body.email, body.phoneNumber, body.image, body.insuranceState, body.role, body.country, body.password]).then(data=>{
+        console.log(data);
+        res.json(JSON.stringify(data));
+      }).catch(err=>{
+        console.log(err.message);
+      });
+    // }
+  // }catch(err){
+  //   console.log(err.message);
+  // }
 }
+// function selfVisitHandler(req,res){
+//   const body = req.body;
+//   body.drugs.forEach(drug =>{
 
-function doctorVisit(req,res){
-  let  {speciality,time,City,date}=req.query;
-  res.status(200).render('client/doctorVisit.ejs');
-  
-}
-function selfVisit(req,res){
-  res.status(200).render('client/selfVisit.ejs',{header:'self Visit'});
-    
-}
+//   });
+//   body.labs.forEach(lab=>{
 
-function reserveVisit(req,res){
-  // let  {name,specialty,availabilty,phonenumber,location}=req.body;
-  //res.redirect('client/appointments/reserved');
-}
-function appointments(req,res){
-  res.status(200).render('client/searchappointments.ejs');
-    
-}
+//   });
+//   body.therapies.forEach(therapy=>{
 
-function reserve(req,res){
-  let  {name,specialty,availabilty,phonenumber,location}=req.body;
-  res.redirect('client/appointments/reserved');
-}
+//   });
+//   body.radios.forEach(radio=>{
 
-function appointmentsReserved(req,res){
-  res.status(200).render('client/appointmentsReserved.ejs');
-      
-}
-
-function subscribeToInsurance(req,res){
-  res.status(200).render('client/subscribeToInsurance.ejs');
-        
-}
+//   });
+// }
 
 module.exports=clientRoute;

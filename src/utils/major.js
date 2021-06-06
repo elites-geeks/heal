@@ -57,7 +57,7 @@ class Employee extends User {
     }
 }
 class Patient extends User {
-    constructor(id, name, contact, password, role, imgURL, dateOfBirth, insuranceStatus, insuranceComp) {
+    constructor(id, firstname,lastname, contact, password, role, imgURL, dateOfBirth, insuranceStatus, insuranceComp) {
         super(id, name, contact, password, role, imgURL, dateOfBirth);
         this.insuranceStatus = insuranceStatus;
         this.insuranceComp = insuranceComp;
@@ -91,5 +91,6 @@ module.exports = {
     Hospital,
     Admin,
     Patient,
-    Doctor
+    Doctor,
+    MedicalInstitute
 }
