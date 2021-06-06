@@ -7,7 +7,7 @@ const reservationSchema = mongoose.Schema({
     doctor: {type: Doctors, required: true},
     patient: {type: Patients, required:true},
     time: {type: String, required:true},
-    data: {type: String} 
+    data: {type: String}
 });
 
 const drugSchema = mongoose.Schema({
@@ -32,7 +32,8 @@ const testSchema  = mongoose.Schema({
     notes: {type: Number, required: true},
     timestart: {type: String, required: true},
     timeend: {type: String, required: true},
-    expected_time: {type: String, required: true}
+    expected_time: {type: String, required: true},
+    status: {enum: ['pending', 'paid', 'active'], required:true}
 });
 
 

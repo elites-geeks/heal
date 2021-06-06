@@ -34,7 +34,8 @@ const patientSchema = mongoose.Schema({
     phone_number: {type: Number, required: true},
     gender: {enum: ['male', 'female'], required: true},
     img: {type: Buffer, required:true},
-    email: {type: String}
+    email: {type: String}, 
+    token: {type: String, required:true}
 });
 
 // mongoose schema for doctor
