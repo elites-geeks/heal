@@ -11,7 +11,14 @@ const adminSchema = mongoose.Schema({
         firstname: String,
         lastname: String,
         required: true
-     }
+    },
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+    date_of_birth: {type: Date, required: true},
+    phone_number: {type: Number, required: true},
+    gender: {enum: ['male', 'female'], required: true},
+    img: {type: Buffer, required:true},
+    email: {type: String}
 });
 
 // mongoose schema for patient
@@ -20,12 +27,12 @@ const patientSchema = mongoose.Schema({
         firstname: String,
         lastname: String,
         required: true
-     },
+    },
     username: { type: String, required: true },
     password: { type: String, required: true },
     date_of_birth: {type: Date, required: true},
     phone_number: {type: Number, required: true},
-    gender: {type: String, required: true},
+    gender: {enum: ['male', 'female'], required: true},
     img: {type: Buffer, required:true},
     email: {type: String}
 });
@@ -41,14 +48,14 @@ const doctorSchema = mongoose.Schema({
     password: { type: String, required: true },
     date_of_birth: {type: Date, required: true},
     phone_number: {type: Number, required: true},
-    gender: {type: String, required: true},
+    gender: {enum: ['male', 'female'], required: true},
     img: {type: Buffer, required:true},
     email: {type: String},
     specialty: { type: String, required: true },
     location: { type: String, required: true },
     clinic_phone_number: { type: Number, required: true },
     yaers_of_exp: { type: Number, required: true},
-
+    
 });
 
 // mongoose schema for accountant
@@ -57,14 +64,15 @@ const accountantSchema = mongoose.Schema({
         firstname: String,
         lastname: String,
         required: true
-     },
+    },
     username: { type: String, required: true },
     password: { type: String, required: true },
     date_of_birth: {type: Date, required: true},
+    gender: {enum: ['male', 'female'], required: true},
     phone_number: {type: Number, required: true},
     img: {type: Buffer, required:true},
     email: {type: String},
-    // institute: {type: , required:true}
+    institute: {type: String, required:true}
 });
 
 // mongoose schema for medical staff
@@ -73,15 +81,15 @@ const medicalStaffSchema = mongoose.Schema({
         firstname: String,
         lastname: String,
         required: true
-     },
+    },
     username: { type: String, required: true },
     password: { type: String, required: true },
     date_of_birth: {type: Date, required: true},
     phone_number: {type: Number, required: true},
-    gender: {type: String, required: true},
+    gender: {enum: ['male', 'female'], required: true},
     img: {type: Buffer, required:true},
     email: {type: String},
-    // institute: {type: , required:true}
+    institute: {type: String, required:true}
 });
 
 // mongoose schema for insurance company representitave
@@ -90,7 +98,7 @@ const insuranceRepSchema = mongoose.Schema({
         firstname: String,
         lastname: String,
         required: true
-     },
+    },
     username: { type: String, required: true },
     password: { type: String, required: true },
     date_of_birth: {type: Date, required: true},
@@ -98,7 +106,7 @@ const insuranceRepSchema = mongoose.Schema({
     gender: {type: String, required: true},
     img: {type: Buffer, required:true},
     email: {type: String},
-    // insurance_company: {type: , required: true},
+    institute: {type: String, required:true}
 });
 
 

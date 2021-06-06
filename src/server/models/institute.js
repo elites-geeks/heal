@@ -10,7 +10,8 @@ const hospitalSchema = mongoose.Schema({
         city: String,
         required: true
     },
-    telephone: {type: Number, required},
+    telephone: {type: Number, required: true},
+    departments: {type : Array, required: true}
 });
 
 // mongoose schema for health care institute
@@ -21,7 +22,8 @@ const healthCareInsSchema = mongoose.Schema({
         city: String,
         required: true
     },
-    telephone: {type: Number, required},
+    telephone: {type: Number, required: true},
+    departments: {type : Array, required: true}
 });
 
 // mongoose schema for insurance company
@@ -33,6 +35,7 @@ const insuranceCompanySchema = mongoose.Schema({
         required: true
     },
     telephone: {type: Number, required},
+    departments: {type : Array, required: true}
 });
 
 const hospitals = mongoose.model('hospitals', hospitalSchema);
