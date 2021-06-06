@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>visit</title>
+</head>
+<body>
+    <section>
+        <table>
+            <th>
+                <tr>
+                    <td>procedure</td>
+                    <td>price</td>
+                </tr>
+            </th>
+        <%searchResults.forEach(result=>{%>
+           
+               <tr>
+                   <td><%=result.procedure%></td>
+                   <td><%=result.price%></td>
+               </tr>
+           
+
+            <form action="" method="post">
+<input type="hidden" value="<%=result.procedure%>">
+<input type="hidden" value="<%=result.price%>">
+                <button type="submit">leave</button>
+                <button type="submit">confirm payment</button>
+            </form>
+            <%})%>
+        </table>
+            <p>total:<%=result.total%> </p>
+            
+    </section>
+</body>
+</html>

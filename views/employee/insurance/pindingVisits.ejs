@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pinding Visits</title>
+</head>
+<body>
+    <h1>pindingVisits</h1>
+
+    <section>
+        <%searchResults.forEach(result=>{%>
+            <div>
+           <p>patient ID : <%=result.patientId%></p>
+           <p>patient name : <%=result.patientname%></p>
+           <p>Doctor name : <%=result.doctorname%></p>
+           <p>diagnoses<%=result.diagnoses%></p>
+
+           <a href="/employee/insurance/VisitDetails">show details</a>
+    </div>
+   
+            <%})%>
+    </section>
+</body>
+</html>
