@@ -461,23 +461,27 @@ const diagnosisSchema = mongoose.Schema({
 });
 
 const appointmentSchema = mongoose.Schema({
-  doctor: {
-    type: String,
-    required: true,
-  },
-  patient: {
-    type: String,
-    required: true,
-  },
-  time: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    required: true,
-    enum: ['new', 'active', 'history', 'deleted', 'missed'],
-  },
+    doctor: {
+        type: String,
+        required: true
+    },
+    patient: {
+        type: String,
+        required: true
+    },
+    time: {
+        type: String,
+        required: true
+    },
+    date:{
+        type:String,
+        required:true
+    },
+    status: {
+        type: String,
+        required: true,
+        enum: ['new', 'active', 'history', 'deleted', 'missed']
+    }
 });
 const doctorVisitSchema = mongoose.Schema({
   appoitmentNum: {
