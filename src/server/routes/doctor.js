@@ -4,23 +4,9 @@ const express = require('express');
 
 const doctorRoute = express.Router();
 
-doctorRoute.get('/', dashboard);
-doctorRoute.get('/diagnosis', diagnosis);
-doctorRoute.post('/diagnosis', diagnosis);
-doctorRoute.get('/visit/doctor', selfVisit);
+doctorRoute.get('/appointment', getAppointmentHandler);
+doctorRoute.post('/diagnosis/:visitid', writeDiagnosisHandler);
+doctorRoute.post('/procedures/visit/:id', addProceduresHandler);
 
-
-
-function dashboard(req,res){
-  res.status(200).render('doctor/dashboard.ejs');
-}
-
-function diagnosis(req,res){
-  res.status(200).render('doctor/diagnosis.ejs');
-}
-function selfVisit(req,res){
-  res.status(200).render('client/selfVisit.ejs',{header:'doctor Visit'});
-    
-}
 
 module.exports=doctorRoute;

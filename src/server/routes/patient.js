@@ -1,16 +1,17 @@
 'use strict';
 
 const express = require('express');
-const clientRoute = express.Router();
+const patientRoute = express.Router();
 // Routes
-// clientRoute.post('/register' , registerHandler);
-// clientRoute.post('/new-visit/self', selfVisitHandler);
-// clientRoute.get('/appointment/search');
-// clientRoute.get('/procedures/pending');
-// clientRoute.get('/procedures/paid');
-// clientRoute.get('/procedures/active');
-// clientRoute.get('/appointment')
-
+// patientRoute.post('/new-visit/self', selfVisitHandler);
+// patientRoute.get('/appointment/search' , appointmentSearchHandler);
+// patientRoute.get('/procedures/pending' , pendingProceduresHandler);
+// patientRoute.get('/procedures/paid' , paidProceduresHanler);
+// patientRoute.get('/procedures/active', activeProceduresHandler);
+// patientRoute.get('/appointment', appointmentGetHandler)
+patientRoute.post('/procedures');
+patientRoute.post('/insutance/subscribe', subscribeHandler);
+patientRoute.
 // Routes handlers
 // async function registerHandler(req,res){
   // console.log(req.body);
@@ -57,4 +58,4 @@ const clientRoute = express.Router();
 //   });
 // }
 
-module.exports={clientRoute};
+module.exports={patientRoute};

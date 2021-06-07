@@ -83,7 +83,7 @@ const employeeSchema = mongoose.Schema({
         required: true
     },
     info: {
-        type: entitySchema,
+        type: userSchema,
         required: true
     },
     patientsServed: {
@@ -495,6 +495,9 @@ const doctorVisitSchema = mongoose.Schema({
     },
     timeEnded: {
         type: String
+    },
+    accountant:{
+        type:String
     }
 });
 const selfVisitSchema = mongoose.Schema({
@@ -520,6 +523,9 @@ const selfVisitSchema = mongoose.Schema({
     },
     timeEnded: {
         type: String
+    },
+    accountant:{
+        type:String
     }
 
 });
@@ -540,19 +546,79 @@ const patientHistory = mongoose.Schema({
         type: [String]
     }
 });
+
+entitySchema.virtual('token').get(function () {
+    let tokenObject = {
+        username: this.username,
+    };
+    return jwt.sign(tokenObject, process.env.SECRET);
+});
+
+doctorVisitSchema.virtual('token').get(function () {
+    let tokenObject = {
+        tokenId: this._id,
+    };
+    return jwt.sign(tokenObject, process.env.SECRET);
+});
+
+selfVisitSchema.virtual('token').get(function () {
+    let tokenObject = {
+        tokenId: this._id,
+    };
+    return jwt.sign(tokenObject, process.env.SECRET);
+});
+
+doctorVisitSchema.pre('save',async function (){
+    if(this.isModified('accountant')){
+        const acco = Employee.findById(this.accountant);
+        this.token = jwt.sign({
+            tokenId:this._id,
+            accountant:acco.institute
+        }, process.env.SECRET);
+    }
+});
+selfVisitSchema.pre('save',async function (){
+    if(this.isModified('accountant')){
+        const acco = Employee.findById(this.accountant);
+        this.token = jwt.sign({
+            tokenId:this._id,
+            accountant:acco.institute
+        }, process.env.SECRET);
+    }
+});
 // Pre-Save Hook
 entitySchema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, 10);
     next();
 })
 
-// Authenticate user using bcrypt
-entitySchema.statics.authenticateToken = async function (token) {
-    let payload = jwt.verify(token, SECRET);
-    return await this.findOne({
-        username: payload.username
-    });
-}
+
+entitySchema.statics.authenticateWithToken = async function (token) {
+    try {
+        const parsedToken = jwt.verify(token, process.env.SECRET);
+        // console.log(parsedToken);
+        const user = await this.findOne({
+            username: parsedToken.username
+        });
+        // console.log(user);
+        if (user) {
+            return user;
+        }
+        throw new Error('User Not Found');
+    } catch (e) {
+        throw new Error(e.message);
+    }
+};
+
+entitySchema.virtual('capabilities').get(function () {
+    let acl = {
+        user: ['read'],
+        writer: ['read', 'create'],
+        editor: ['read', 'create', 'update'],
+        admin: ['read', 'create', 'update', 'delete'],
+    };
+    return acl[this.role];
+});
 
 // Create a mongoose schema
 // const Admin = mongoose.model('Admin', adminSchema);
