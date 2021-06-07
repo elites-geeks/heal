@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, '../../public')));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({
-    extended: true,
+  extended: true,
 }));
 
 
@@ -29,21 +29,21 @@ app.use(express.urlencoded({
 //   res.sendFile('../../public/home.html');
 // });
 app.post('/signin', basic, (req, res) => {
-    // const userRole = req.user.field? req.user.role+'/'+req.user.field : req.user.role;
+  // const userRole = req.user.field? req.user.role+'/'+req.user.field : req.user.role;
 
-    console.log("Authintication done");
-    res.send(req.user)
+  console.log('Authintication done');
+  res.send(req.user);
 });
 app.post('/regesterUser', bearer, (req, res) => {
-    const {
-        user,
-        token
-    } = req;
-    const output = {
-        user,
-        token
-    }
-    res.send(output)
+  const {
+    user,
+    token,
+  } = req;
+  const output = {
+    user,
+    token,
+  };
+  res.send(output);
 });
 
 // app.use('/patient',patient);
@@ -52,13 +52,13 @@ app.post('/regesterUser', bearer, (req, res) => {
 // app.use('/insurance',insurance);
 
 function run(PORT) {
-    app.listen(PORT, () => {
-        console.log('Server up on ', PORT);
-    });
+  app.listen(PORT, () => {
+    console.log('Server up on ', PORT);
+  });
 }
 app.use('*', notFoundHandler);
 app.use(errorHandler);
 module.exports = {
-    run,
-    app,
+  run,
+  app,
 };
