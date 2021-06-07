@@ -1,6 +1,6 @@
 'use strict';
 
-const UserModel = require('../models/user');
+const {Entity} = require('../models/user');
 
 module.exports = async (req, res, next) => {
   // a token in the req headers 
@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
     try {
       let token = req.headers.authorization.split(' ').pop();
       console.log('token in Bearer Auth:: ', token);
-      let user = await UserModel.authenticateToken(token);
+      let user = await Entity.authenticateToken(token);
       if (user) {
         req.user = user;
         next();
