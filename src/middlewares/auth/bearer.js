@@ -1,6 +1,6 @@
 'use strict';
 
-const {Entity} = require('../models/user');
+const {Entity} = require('../../server/models/user');
 
 module.exports = async (req, res, next) => {
   // a token in the req headers 
@@ -12,17 +12,16 @@ module.exports = async (req, res, next) => {
     // get the token from headers
     try {
       let token = req.headers.authorization.split(' ').pop();
-      console.log('token in Bearer Auth:: ', token);
-      let user = await Entity.authenticateToken(token);
+      let user = await Entity.authenticateWithToken(token);
       if (user) {
         req.user = user;
+        req.token = user.token;
         next();
       } else {
         next('Invalid Token!!!!');
       }
 
     } catch(ex) {
-      // next('Invalid User Token ')
       res.status(403).send('Invalid Token!!!!');
 
     }
