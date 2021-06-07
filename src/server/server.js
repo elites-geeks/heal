@@ -23,7 +23,7 @@ app.use(express.urlencoded({
 
 // const patient=require('../server/routes/patient.js');
 // const doctor=require('../server/routes/doctor.js');
-// const insurance=require('../server/routes/insurance');
+const insurance=require('../server/routes/insurance');
 
 // app.get('/', (req, res) => {
 //   res.sendFile('../../public/home.html');
@@ -49,7 +49,7 @@ app.post('/regesterUser', bearer, (req, res) => {
 // app.use('/patient',patient);
 // app.use('/doctor',doctor);
 
-// app.use('/insurance',insurance);
+app.use('/insurance',insurance);
 
 function run(PORT) {
   app.listen(PORT, () => {

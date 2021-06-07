@@ -99,8 +99,28 @@ async function appointmentGetHandler(req,res){
   }
 }
 async function subscribeHandler(req,res){
-  
+  try{
+
+    let {patientId,insuranceComp,policy}=req.body;
+    let newSubscribtionRequest=new db.subscribtionRequest({
+      patientId:patientId,
+      insuranceComp:insuranceComp,
+      policy:policy,
+      status:'pending',
+
+    });
+    let saveSubsicribe=await newSubscribtionRequest.save();
+    let patient=await db.Patient.findById(patientId);
+    let insuinsur=await db.InsuranceComp.findById(insuranceComp);
+    let policyy=await db.Policy.findById(policy);
+    res.status(200).json({patient,insuinsur,policyy});
+  }catch(error){
+    console.log(error);
+  }
 }
+  
+  
+
 
 
 

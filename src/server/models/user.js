@@ -171,7 +171,25 @@ const insuranceCompSchema = mongoose.Schema({
     type: [String],
   },
 });
-
+const subscribtionRequestSchema=mongoose.Schema({
+  patientId:{
+    type:String,
+    required:true,
+  },
+  insuranceComp:{
+    type:String,
+    required:true,
+  },
+  policy:{
+    type:String,
+    required:true,
+  },
+  status:{
+    type:String,
+    required:true,
+    enum:['pinding','approved','rejected'],
+  },
+});
 const doctorSchema = mongoose.Schema({
   userProfile: {
     type: userSchema,
@@ -500,6 +518,18 @@ const doctorVisitSchema = mongoose.Schema({
     type:String,
   },
 });
+
+const visitApprove=mongoose.Schema({
+  visitNumber:{
+    type :String,
+    required:true,
+  },
+  status:{
+    type:String,
+    enum:['approved','notapproved','pinding'],
+  },
+});
+
 const selfVisitSchema = mongoose.Schema({
   patient: {
     type: String,
@@ -641,7 +671,8 @@ const InsuranceComp = mongoose.model('InsuranceComp', insuranceCompSchema);
 const Policy = mongoose.model('Policy', policySchema);
 const Institute = mongoose.model('Institute', instiuteSchema);
 const Department = mongoose.model('Department', departmentSchema);
-
+const VisitApprove = mongoose.model('VisitApprove', visitApprove);
+const subscribtionRequest = mongoose.model('subscribtionRequest', subscribtionRequestSchema);
 module.exports = {
   Patient,
   Employee,
@@ -662,4 +693,6 @@ module.exports = {
   Policy,
   Institute,
   Department,
+  VisitApprove,
+  subscribtionRequest,
 };
