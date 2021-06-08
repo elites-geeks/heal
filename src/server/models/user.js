@@ -27,7 +27,7 @@ const entitySchema = mongoose.Schema({
     role: {
         type: String,
         required: true,
-        enum: ['user', 'institute'],
+        enum: ['user', 'institute', 'admin'],
     },
 });
 
@@ -64,7 +64,7 @@ const userSchema = mongoose.Schema({
     type: {
         type: String,
         required: true,
-        enum: ['patient', 'doctor', 'employee', 'admin'],
+        enum: ['patient', 'doctor', 'employee'],
     },
 });
 
@@ -592,6 +592,8 @@ const visitApprove = mongoose.Schema({
 entitySchema.virtual('token').get(function () {
     let tokenObject = {
         username: this.username,
+        role:this.role,
+        id=this._id
     };
     return jwt.sign(tokenObject, process.env.SECRET);
 });

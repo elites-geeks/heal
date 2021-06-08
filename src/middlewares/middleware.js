@@ -6,12 +6,17 @@ const {
     Employee,
     Department,
     Doctor,
-    Patient
+    Patient,
+    Visit,
+    LabTest,
+    RadioTest,
+    Therapy,
+    Drug,
+    Institute,
+    InsuranceComp
 } = require('../server/models/user');
 async function addEmployee(req, res, next) {
     try {
-
-
         const input = req.body;
         if (info.role == 'user') {
             if (info.type == 'employee') {
@@ -121,14 +126,105 @@ async function checkUsername(req, res, next) {
         username
     } = req.body;
     try {
-        const user =await Entity.find({username:username});
-        if(!user){
+        const user = await Entity.find({
+            username: username
+        });
+        if (!user) {
             next();
-        }else{
+        } else {
             next("Username already Exists")
         }
     } catch (error) {
         console.log(error.message);
     }
 
+}
+
+async function getAllProcedures(req, res, next) {
+    try {
+        const {
+            id
+        } = req.params;
+        const visit = await Visit.findById(id);
+        const allLabTests = visit.lab.map(async (id) => {
+            const test = await LabTest.findById(id);
+            return test;
+        });
+        const allDrugs = visit.drug.map(async (id) => {
+            const drug = await Drug.findById(id);
+            return drug;
+        });
+        const allRadios = visit.radio.map(async (id) => {
+            const radio = await RadioTest.findById(id);
+            return radio;
+        });
+        const allTherapies = visit.therapy.map(async (id) => {
+            const therapy = await Therapy.findById(id);
+            return therapy;
+        });
+        req.allProcedures = {
+            allLabTests,
+            allDrugs,
+            allRadios,
+            allTherapies
+        }
+        next();
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+async function addHospital(req, res, next) {
+    const input = req.body;
+    try {
+        if (info.role == 'institute') {
+            if (info.type == 'hospital') {
+                const ent = new Entity(input);
+                await ent.save();
+                const institute = new Institute({
+                    info: ent,
+                    ...input
+                });
+                const savedInst = await institute.save();
+                req.newHospital = savedInst;
+                next()
+            } else {
+                next("Not a Hospital")
+            }
+        } else {
+            next("Not an Institute")
+        }
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+async function addInsurance(req, res, next) {
+    const input = req.body;
+    try {
+        if (info.role == 'institute') {
+            if (info.type == 'insurance') {
+                const ent = new Entity(input);
+                await ent.save();
+                const institute = new Institute({
+                    info: ent,
+                    ...input
+                });
+                await institute.save();
+                const insuranceCompany = new InsuranceComp({
+                    info:institute,
+                    ...input
+                });
+                const savedIns = await institute.save();
+                req.newInsComp = savedIns;
+                next()
+            } else {
+                next("Not an Insurance company")
+            }
+        } else {
+            next("Not an Institute")
+        }
+    } catch (err) {
+        console.log(err.message);
+    }
 }
