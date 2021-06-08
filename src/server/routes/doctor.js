@@ -34,7 +34,7 @@ async function writeDiagnosisHandler(req, res){
         visitNum:visitId,
         timeWritten:timeWritten,
         signs:signs,
-        symproms:symproms,
+        sypmtoms:sypmtoms,
         finalDiagnosis:finalDiagnosis
     });
     const saved =await newDig.saved();

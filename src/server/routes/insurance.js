@@ -32,18 +32,20 @@ async function getAllRequestsHandler(req, res) {
       status: 'pinding',
       insuranceComp: id,
     });
-    console.log('listOfSubscribtionReq',listOfSubscribtionReq)
-    const newList =await listOfSubscribtionReq.map(async (subscribe) => {
+    //console.log('listOfSubscribtionReq',listOfSubscribtionReq)
+    const newList =await Promise.all(listOfSubscribtionReq.map(async (subscribe) => {
       const patient = await db.Patient.findById(subscribe.patientId);
       const policy = await db.Policy.findById(subscribe.policy);
-      console.log('patient',patient)
-      console.log('policy',policy)
+      //console.log('patient',patient)
+      //console.log('policy',policy)
       return {
         patient,
         policy,
       };
-    });    
-    console.log(newList)
+    })); 
+
+    //console.log('newList',newList);
+
     res.status(200).send(newList);
   } catch (err) {
     console.log(err);
@@ -72,7 +74,7 @@ async function getAllPendingVisitsHndlers(req, res) {
       approval: 'pinding',
       insuranceComp: req.params.insuranceCompanyId,
     });
-    console.log(getAllPendingVisits)
+    // console.log(getAllPendingVisits)
     res.status(200).json(JSON.stringify(getAllPendingVisits));
 
   } catch (err) {
@@ -118,11 +120,16 @@ async function getOneVistHandler(req, res) {
 async function visitApprovalHandler(req, res) {
   try {
     let id = req.params.id;
-    let approval = req.body;
-    const approveVisit = await db.VisitApprove.findByIdAndUpdate(id, {
-      approval: approval,
-    });
-    res.status(204).send(approveVisit);
+    let approval = req.body.status;
+    // console.log(approval)
+    // const approveVisit = await db.VisitApprove.findByIdAndUpdate(id, {
+    //     status: req.body.status
+    // });
+    const approveVisit = await db.VisitApprove.findById(id);
+    approveVisit.status=req.body.status;
+    const approving= await approveVisit.save();
+    //console.log('approveVisit',approving)
+    res.status(204).send(approving);
 
   } catch (err) {
     console.log(err);
@@ -195,7 +202,7 @@ async function modifyPolicyHandler(req, res) {
   try {
     let obj = req.body;
     const updatePolicy = await db.Policy.findByIdAndUpdate(policyId, obj);
-   // console.log(updatePolicy)
+    // console.log(updatePolicy)
     res.status(204).send(updatePolicy);
   } catch (err) {
     console.log(err);
