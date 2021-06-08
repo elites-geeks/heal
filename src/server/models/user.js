@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema({
     required: true,
   },
   date_of_birth: {
-    type: Date,
+    type: String,
     required: true,
   },
   firstname: {
@@ -251,43 +251,6 @@ const doctorSchema = mongoose.Schema({
     type: [String],
   },
 });
-const visitSchema = mongoose.Schema({
-  appoitmentNum: {
-    type: String,
-  },
-  patient: {
-    type: String,
-    required: true,
-  },
-  doctor: {
-    type: String,
-  },
-  diagnosis: {
-    type: String,
-  },
-  lab: {
-    type: [String],
-  },
-  radio: {
-    type: [String],
-  },
-  drug: {
-    type: [String],
-  },
-  therapy: {
-    type: [String],
-  },
-  timeOpened: {
-    type: String,
-    required: true,
-  },
-  timeEnded: {
-    type: String,
-  },
-  accountant:{
-    type:String,
-  },
-});
 
 const patientHistorySchema = mongoose.Schema({
   medicalState: {
@@ -314,8 +277,7 @@ const patientSchema = mongoose.Schema({
   appointmentList: {
     type: [String],
   },
-  patientHistory:{type:patientHistorySchema,
-    required:true},
+  patientHistory:{type:patientHistorySchema}
 });
 
 const procedureSchema = mongoose.Schema({

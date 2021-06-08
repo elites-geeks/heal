@@ -7,12 +7,11 @@ const {Appointment , Patient , Doctor, Diagnosis, Visit} = require('../models/us
 
 doctorRoute.get('/appointment/:docid', getAppointmentHandler);
 doctorRoute.post('/diagnosis/:visitid', writeDiagnosisHandler);
-doctorRoute.post('/procedures/visit/:id', addProceduresHandler);
+// doctorRoute.post('/procedures/visit/:id', addProceduresHandler);
 
 async function getAppointmentHandler(req, res){
   const doctorId = req.params.docid;
   const listOfAppointments = await Appointment.find({doctor:doctorId, status:'new'});
-  
   const output = listOfAppointments.map(async appointment=>{
     const patient = await Patient.findById(appointment.patient)
     let obj = {
@@ -27,20 +26,19 @@ async function getAppointmentHandler(req, res){
 
 async function writeDiagnosisHandler(req, res){
     const visitId = req.params.visitid;
-    const visit = await Visit.findById(visitId);
-    const {doctor , patient} = visit;
+    const {doctor , patient} = await Visit.findById(visitId);
     const timeWritten = moment().format('hh:mm');
-    const {signs , symproms , finalDiagnosis} = req.body;
+    const {signs , symptoms , finalDiagnosis} = req.body;
     const newDig = new Diagnosis({
         patient:patient,
         doctor:doctor,
         visitNum:visitId,
         timeWritten:timeWritten,
         signs:signs,
-        symproms:symproms,
+        symptoms:symptoms,
         finalDiagnosis:finalDiagnosis
     });
-    const saved =await newDig.saved();
+    const saved =await newDig.save();
     await Visit.findByIdAndUpdate(visitId, {diagnosis:saved._id});
     const dr = await Doctor.findById(doctor);
     const pat = await Patient.findById(patient);
@@ -48,10 +46,10 @@ async function writeDiagnosisHandler(req, res){
         visitNum:visitId,
         timeWritten:timeWritten,
         signs:signs,
-        symproms:symproms,
+        symptoms:symptoms,
         finalDiagnosis:finalDiagnosis,
-        doctor:dr.info.firstname + " " +dr.info.lastname,
-        patient:pat.info.firstname + " " +dr.info.lastname
+        doctor:dr.userProfile.info.firstname + " " +dr.userProfile.info.lastname,
+        patient:pat.userProfile.info.firstname + " " +dr.userProfile.info.lastname
     }
     res.status(201).json(ret);
 }
