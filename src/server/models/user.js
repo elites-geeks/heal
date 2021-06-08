@@ -251,6 +251,43 @@ const doctorSchema = mongoose.Schema({
     type: [String],
   },
 });
+const visitSchema = mongoose.Schema({
+  appoitmentNum: {
+    type: String,
+  },
+  patient: {
+    type: String,
+    required: true,
+  },
+  doctor: {
+    type: String,
+  },
+  diagnosis: {
+    type: String,
+  },
+  lab: {
+    type: [String],
+  },
+  radio: {
+    type: [String],
+  },
+  drug: {
+    type: [String],
+  },
+  therapy: {
+    type: [String],
+  },
+  timeOpened: {
+    type: String,
+    required: true,
+  },
+  timeEnded: {
+    type: String,
+  },
+  accountant:{
+    type:String,
+  },
+});
 
 const patientHistorySchema = mongoose.Schema({
   medicalState: {
@@ -259,7 +296,7 @@ const patientHistorySchema = mongoose.Schema({
   },
   visits: {
     type: [visitSchema],
-  }  
+  },  
 });
 
 const patientSchema = mongoose.Schema({
@@ -278,7 +315,7 @@ const patientSchema = mongoose.Schema({
     type: [String],
   },
   patientHistory:{type:patientHistorySchema,
-  required:true}
+    required:true},
 });
 
 const procedureSchema = mongoose.Schema({
@@ -506,27 +543,27 @@ const diagnosisSchema = mongoose.Schema({
 });
 
 const appointmentSchema = mongoose.Schema({
-    doctor: {
-        type: String,
-        required: true
-    },
-    patient: {
-        type: String,
-        required: true
-    },
-    time: {
-        type: String,
-        required: true
-    },
-    date:{
-        type:String,
-        required:true
-    },
-    status: {
-        type: String,
-        required: true,
-        enum: ['new', 'active', 'history', 'deleted', 'missed']
-    }
+  doctor: {
+    type: String,
+    required: true,
+  },
+  patient: {
+    type: String,
+    required: true,
+  },
+  time: {
+    type: String,
+    required: true,
+  },
+  date:{
+    type:String,
+    required:true,
+  },
+  status: {
+    type: String,
+    required: true,
+    enum: ['new', 'active', 'history', 'deleted', 'missed'],
+  },
 });
 
 const visitApprove=mongoose.Schema({
@@ -536,7 +573,7 @@ const visitApprove=mongoose.Schema({
   },
   insuranceComp:{
     type:String,
-    required:true
+    required:true,
   },
   status:{
     type:String,
