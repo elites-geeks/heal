@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema({
     required: true,
   },
   date_of_birth: {
-    type: Date,
+    type: String,
     required: true,
   },
   firstname: {
@@ -123,7 +123,7 @@ const instiuteSchema = mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['hospital', 'medical', 'insurance'],
+    enum: ['hospital', 'insurance'],
   },
 });
 
@@ -149,71 +149,6 @@ const policySchema = mongoose.Schema({
   },
 });
 
-const insuranceCompSchema = mongoose.Schema({
-  profile: {
-    type: instiuteSchema,
-    required: true,
-  },
-  listOfPolicies: {
-    type: [policySchema],
-  },
-  listOfSubscribers: {
-    type: [String],
-  },
-  listOfAccreditedInstitution: {
-    type: [String],
-  },
-  listOfAccreditedDoctors: {
-    type: [String],
-  },
-});
-const subscribtionRequestSchema=mongoose.Schema({
-  patientId:{
-    type:String,
-    required:true,
-  },
-  insuranceComp:{
-    type:String,
-    required:true,
-  },
-  policy:{
-    type:String,
-    required:true,
-  },
-  status:{
-    type:String,
-    required:true,
-    enum:['pinding','approved','rejected'],
-  },
-});
-const doctorSchema = mongoose.Schema({
-  userProfile: {
-    type: userSchema,
-    required: true,
-  },
-  specialty: {
-    type: String,
-    required: true,
-  },
-  clinicLocation: {
-    type: String,
-    required: true,
-  },
-  clinicPhoneNumber: {
-    type: Number,
-    required: true,
-  },
-  yearsOfExp: {
-    type: Number,
-    required: true,
-  },
-  listOfAccreditedInsuranceComp: {
-    type: [String],
-  },
-  appointmentList: {
-    type: [String],
-  },
-});
 const visitSchema = mongoose.Schema({
   appoitmentNum: {
     type: String,
@@ -251,6 +186,71 @@ const visitSchema = mongoose.Schema({
     type:String,
   },
 });
+const insuranceCompSchema = mongoose.Schema({
+  profile: {
+    type: instiuteSchema,
+    required: true,
+  },
+  listOfPolicies: {
+    type: [policySchema],
+  },
+  listOfSubscribers: {
+    type: [String],
+  },
+  listOfAccreditedInstitution: {
+    type: [String],
+  },
+  listOfAccreditedDoctors: {
+    type: [String],
+  },
+});
+const subscribtionRequestSchema = mongoose.Schema({
+  patientId: {
+    type: String,
+    required: true,
+  },
+  insuranceComp: {
+    type: String,
+    required: true,
+  },
+  policy: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    required: true,
+    enum: ['pinding', 'approved', 'rejected'],
+  },
+});
+const doctorSchema = mongoose.Schema({
+  userProfile: {
+    type: userSchema,
+    required: true,
+  },
+  specialty: {
+    type: String,
+    required: true,
+  },
+  clinicLocation: {
+    type: String,
+    required: true,
+  },
+  clinicPhoneNumber: {
+    type: Number,
+    required: true,
+  },
+  yearsOfExp: {
+    type: Number,
+    required: true,
+  },
+  listOfAccreditedInsuranceComp: {
+    type: [String],
+  },
+  appointmentList: {
+    type: [String],
+  },
+});
 
 const patientHistorySchema = mongoose.Schema({
   medicalState: {
@@ -277,8 +277,7 @@ const patientSchema = mongoose.Schema({
   appointmentList: {
     type: [String],
   },
-  patientHistory:{type:patientHistorySchema,
-    required:true},
+  patientHistory:{type:patientHistorySchema},
 });
 
 const procedureSchema = mongoose.Schema({
@@ -312,10 +311,12 @@ const procedureSchema = mongoose.Schema({
 const labTestsSchema = mongoose.Schema({
   procedure: {
     type: String,
+    required: true,
   },
   status: {
     type: String,
     enum: ['paid', 'active', 'nonpaid', 'done', 'deleted'],
+    default: 'nonpaid',
     required: true,
   },
   timeAdded: {
@@ -338,7 +339,14 @@ const labTestsSchema = mongoose.Schema({
   result: {
     type: String,
   },
+  timeDeleted :{
+    type: String,
+  },
   visitNum: {
+    type: String,
+    required: true,
+  },
+  doctorRequested: {
     type: String,
     required: true,
   },
@@ -346,6 +354,7 @@ const labTestsSchema = mongoose.Schema({
 const drugSchema = mongoose.Schema({
   procedure: {
     type: String,
+    required: true,
   },
   status: {
     type: String,
@@ -518,9 +527,9 @@ const appointmentSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  date:{
-    type:String,
-    required:true,
+  date: {
+    type: String,
+    required: true,
   },
   status: {
     type: String,
@@ -529,18 +538,19 @@ const appointmentSchema = mongoose.Schema({
   },
 });
 
-const visitApprove=mongoose.Schema({
-  visitNumber:{
-    type :String,
-    required:true,
+
+const visitApprove = mongoose.Schema({
+  visitNumber: {
+    type: String,
+    required: true,
   },
-  insuranceComp:{
-    type:String,
-    required:true,
+  insuranceComp: {
+    type: String,
+    required: true,
   },
-  status:{
-    type:String,
-    enum:['approved','notapproved','pinding'],
+  status: {
+    type: String,
+    enum: ['approved', 'notapproved', 'pinding'],
   },
 });
 
@@ -559,12 +569,12 @@ visitSchema.virtual('token').get(function () {
 });
 
 
-visitSchema.pre('save',async function (){
-  if(this.isModified('accountant')){
+visitSchema.pre('save', async function () {
+  if (this.isModified('accountant')) {
     const acco = Employee.findById(this.accountant);
     this.token = jwt.sign({
-      tokenId:this._id,
-      accountant:acco.institute,
+      tokenId: this._id,
+      accountant: acco.institute,
     }, process.env.SECRET);
   }
 });

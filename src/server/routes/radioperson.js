@@ -1,24 +1,24 @@
 'use strict';
 
 const {
-  LabTest,
+  RadioTest,
   Procedure,
   Doctor,
   Patient,
 } = require('../models/user');
 const moment = require('moment');
 const exress = require('express');
-const labPersonRoute = exress.Router();
+const radioPersonRoute = exress.Router();
 
 // methods and routes
-labPersonRoute.post('/procedures', addNewTest);
-labPersonRoute.get('/procedures', getAlltests);
-labPersonRoute.get('/procedures/:testId', getOneTest);
-labPersonRoute.delete('/procedures/:testId', deleteOneTest);
-labPersonRoute.put('/procedures/:testId', updateOneTest);
-labPersonRoute.get('/tests/visit/:visitid', getVisitTests);
-labPersonRoute.get('/tests/:id', getOneVisitTest);
-labPersonRoute.patch('/tests/:id' , doActionsOnTheTest);
+radioPersonRoute.post('/procedures', addNewTest);
+radioPersonRoute.get('/procedures', getAlltests);
+radioPersonRoute.get('/procedures/:testId', getOneTest);
+radioPersonRoute.delete('/procedures/:testId', deleteOneTest);
+radioPersonRoute.put('/procedures/:testId', updateOneTest);
+radioPersonRoute.get('/tests/visit/:visitid', getVisitTests);
+radioPersonRoute.get('/tests/:id', getOneVisitTest);
+radioPersonRoute.patch('/tests/:id' , doActionsOnTheTest);
 
 
 // handlers
@@ -26,7 +26,7 @@ labPersonRoute.patch('/tests/:id' , doActionsOnTheTest);
 async function getOneVisitTest(req, res) {
   const {id} =req.params;
   try {
-    const test = await LabTest.findById(id);
+    const test = await RadioTest.findById(id);
     res.status(200).json(JSON.stringify(test));
   } catch (error) {
     console.log(error.message);
@@ -35,17 +35,20 @@ async function getOneVisitTest(req, res) {
 async function doActionsOnTheTest(req, res) {
   const {id} = req.params;
   try {
-    const test = await LabTest.findById(id);
-    //console.log(test);
+    console.log(id);
+    console.log(req.body);
+    //console.log(req.body.status);
+    const test = await RadioTest.findById(id);
+    console.log(test);
     if(test.status != 'nonpaid'){
       if(req.body.status == 'active'){
-        const modified = await LabTest.findOneAndUpdate(id,{status:'active' , timeStart: moment().format()});
+        const modified = await RadioTest.findByIdAndUpdate(id,{status:'active' , timeStart: moment().format()});
         res.status(204).json(JSON.stringify(modified));
       } else if(req.body.status == 'done'){
-        const modified = await LabTest.findOneAndUpdate(id,{status:'done' , timeEnd: moment().format() , result:req.body.result});
+        const modified = await RadioTest.findByIdAndUpdate(id,{status:'done' , timeEnd: moment().format() , result:req.body.result});
         res.status(204).json(JSON.stringify(modified));
       }else if(req.body.status == 'deleted'){
-        const modified = await LabTest.findOneAndUpdate(id,{status:'deleted' , timeDeleted: moment().format()});
+        const modified = await RadioTest.findByIdAndUpdate(id,{status:'deleted' , timeDeleted: moment().format()});
         res.status(204).json(JSON.stringify(modified));
       }else{
         throw new Error('Invalid status change');
@@ -63,7 +66,7 @@ async function getVisitTests(req, res) {
     visitid,
   } = req.params;
   try {
-    const visitTests = await LabTest.find({visitNum:visitid});
+    const visitTests = await RadioTest.find({visitNum:visitid});
     if(visitTests){
       const tests =await Promise.all( visitTests.map(async test =>{
         test.procedure = await Procedure.findById(test.procedure);
@@ -87,11 +90,11 @@ async function updateOneTest(req, res) {
     testId,
   } = req.params;
   try {
-    const updated = await Procedure.findOneAndUpdate({_id:testId , type:'lab'}, req.body);
+    const updated = await Procedure.findOneAndUpdate({_id:testId , type:'radio'}, req.body);
     if(updated){
       res.status(204).json(JSON.stringify(updated));
     } else{
-      throw new Error('Not A Lab Test');
+      throw new Error('Not A Radio Test');
     }
   } catch (err) {
     console.log(err.message);
@@ -102,11 +105,11 @@ async function deleteOneTest(req, res) {
     testId,
   } = req.params;
   try {
-    const deleted = await Procedure.findOneAndDelete({_id:testId , type:'lab'});
+    const deleted = await Procedure.findOneAndDelete({_id:testId , type:'radio'});
     if(deleted){
       res.status(204).json(JSON.stringify(deleted));
     }else{
-      throw new Error('Not A Lab Test');
+      throw new Error('Not A radio Test');
     }
   } catch (error) {
     console.log(error.message);
@@ -119,8 +122,8 @@ async function getOneTest(req, res) {
   } = req.params;
   try {
     const test = await Procedure.findById(testId);
-    if(test.type!=='lab'){
-      throw new Error('Not A Lab Test');
+    if(test.type!=='radio'){
+      throw new Error('Not A radio Test');
     }
     res.status(200).json(JSON.stringify(test));
   } catch (err) {
@@ -131,7 +134,7 @@ async function getOneTest(req, res) {
 async function getAlltests(req, res) {
   try {
     const tests = await Procedure.find({
-      type: 'lab',
+      type: 'radio',
     });
     res.status(200).json(JSON.stringify(tests));
   } catch (error) {
@@ -140,8 +143,8 @@ async function getAlltests(req, res) {
 }
 async function addNewTest(req, res) {
   const newTestInput = req.body;
-  if(newTestInput.type !== 'lab'){
-    throw new Error('Not A Lab Test');
+  if(newTestInput.type !== 'radio'){
+    throw new Error('Not A radio Test');
   }
   const newTest = new Procedure(newTestInput);
   try {
@@ -152,4 +155,4 @@ async function addNewTest(req, res) {
   }
 }
 
-module.exports = labPersonRoute;
+module.exports = radioPersonRoute;

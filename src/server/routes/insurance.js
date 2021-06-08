@@ -24,7 +24,6 @@ employeeRoute.get('/subscribers/:insCompId', getAllSubscribreshandlers);
 employeeRoute.get('/subscriber/:id', getOneSubscriberHandler);
 employeeRoute.delete('/subscribers/:insCompId/:patId', deleteSubscriberHandler);
 
-
 async function getAllRequestsHandler(req, res) {
   try {
     let id = req.params.id;
@@ -256,3 +255,5 @@ async function deleteSubscriberHandler(req, res) {
   }
 }
 module.exports = employeeRoute;
+
+

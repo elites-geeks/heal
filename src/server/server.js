@@ -22,9 +22,12 @@ app.use(express.urlencoded({
 
 
 // const patient=require('../server/routes/patient.js');
-// const doctor=require('../server/routes/doctor.js');
+const doctor=require('../server/routes/doctor.js');
 const insurance=require('../server/routes/insurance');
 const accountant=require('../server/routes/accountant');
+const drugperson=require('../server/routes/drugperson');
+const labperson=require('../server/routes/labperson');
+const radioperson=require('../server/routes/radioperson');
 // app.get('/', (req, res) => {
 //   res.sendFile('../../public/home.html');
 // });
@@ -47,9 +50,12 @@ app.post('/regesterUser', bearer, (req, res) => {
 });
 
 // app.use('/patient',patient);
-// app.use('/doctor',doctor);
+app.use('/doctor',doctor);
 
 app.use('/insurance',insurance);
+app.use('/drug',drugperson);
+app.use('/lab',labperson);
+app.use('/radio',radioperson);
 //app.use('/accountant',accountant);
 
 function run(PORT) {
