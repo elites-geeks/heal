@@ -6,8 +6,11 @@ const doctorRoute = express.Router();
 const {Appointment , Patient , Doctor, Diagnosis, Visit} = require('../models/user')
 
 doctorRoute.get('/appointment/:docid', getAppointmentHandler);
+doctorRoute.get('/appointment/patient/:id' , getOneAppointment);
 doctorRoute.post('/diagnosis/:visitid', writeDiagnosisHandler);
 // doctorRoute.post('/procedures/visit/:id', addProceduresHandler);
+
+
 
 async function getAppointmentHandler(req, res){
   const doctorId = req.params.docid;

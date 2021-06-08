@@ -5,7 +5,7 @@ const {Employee, SelfVisit, LabTest,RadioTest,Drug,Therapy, Visit, Patient}=requ
 const accountantRoute = express.Router();
 
 accountantRoute.get('/visit/:id' , getVisitHandler);
-accountantRoute.put('/:accid/visit/:visid' , confirmPaymentHandler);
+accountantRoute.put('/visit/:visid' , confirmPaymentHandler);
 accountantRoute.get('/:accid/patient-served', getPatientServedHandler);
 
 async function getVisitHandler(req,res){
