@@ -128,10 +128,6 @@ const instiuteSchema = mongoose.Schema({
 });
 
 const policySchema = mongoose.Schema({
-  company: {
-    type: String,
-    required: true,
-  },
   offerCoverage: {
     type: Number,
     required: true,
@@ -219,6 +215,16 @@ const doctorSchema = mongoose.Schema({
   },
 });
 
+const patientHistorySchema = mongoose.Schema({
+  medicalState: {
+    type: [String],
+    required: true,
+  },
+  visits: {
+    type: [visitSchema],
+  }  
+});
+
 const patientSchema = mongoose.Schema({
   userProfile: {
     type: userSchema,
@@ -234,6 +240,8 @@ const patientSchema = mongoose.Schema({
   appointmentList: {
     type: [String],
   },
+  patientHistory:{type:patientHistorySchema,
+  required:true}
 });
 
 const procedureSchema = mongoose.Schema({
@@ -483,44 +491,42 @@ const appointmentSchema = mongoose.Schema({
         enum: ['new', 'active', 'history', 'deleted', 'missed']
     }
 });
-const doctorVisitSchema = mongoose.Schema({
+const visitSchema = mongoose.Schema({
   appoitmentNum: {
-    type: String,
-    required: true,
+    type: String
   },
   patient: {
     type: String,
-    required: true,
+    required: true
   },
   doctor: {
-    type: String,
-    required: true,
+    type: String
   },
   diagnosis: {
-    type: String,
+    type: String
   },
   lab: {
-    type: [String],
+    type: [String]
   },
   radio: {
-    type: [String],
+    type: [String]
   },
   drug: {
-    type: [String],
+    type: [String]
   },
   therapy: {
-    type: [String],
+    type: [String]
   },
   timeOpened: {
     type: String,
-    required: true,
+    required: true
   },
   timeEnded: {
-    type: String,
+    type: String
   },
   accountant:{
-    type:String,
-  },
+    type:String
+  }
 });
 
 const visitApprove=mongoose.Schema({
@@ -528,56 +534,13 @@ const visitApprove=mongoose.Schema({
     type :String,
     required:true,
   },
+  insuranceComp:{
+    type:String,
+    required:true
+  },
   status:{
     type:String,
     enum:['approved','notapproved','pinding'],
-  },
-});
-
-const selfVisitSchema = mongoose.Schema({
-  patient: {
-    type: String,
-    required: true,
-  },
-  lab: {
-    type: [String],
-  },
-  radio: {
-    type: [String],
-  },
-  drug: {
-    type: [String],
-  },
-  therapy: {
-    type: [String],
-  },
-  timeOpened: {
-    type: String,
-    required: true,
-  },
-  timeEnded: {
-    type: String,
-  },
-  accountant:{
-    type:String,
-  },
-
-});
-
-const patientHistory = mongoose.Schema({
-  medicalState: {
-    type: [String],
-    required: true,
-  },
-  patient: {
-    type: String,
-    required: true,
-  },
-  selfVisits: {
-    type: [String],
-  },
-  doctorVisits: {
-    type: [String],
   },
 });
 
@@ -588,21 +551,15 @@ entitySchema.virtual('token').get(function () {
   return jwt.sign(tokenObject, process.env.SECRET);
 });
 
-doctorVisitSchema.virtual('token').get(function () {
+visitSchema.virtual('token').get(function () {
   let tokenObject = {
     tokenId: this._id,
   };
   return jwt.sign(tokenObject, process.env.SECRET);
 });
 
-selfVisitSchema.virtual('token').get(function () {
-  let tokenObject = {
-    tokenId: this._id,
-  };
-  return jwt.sign(tokenObject, process.env.SECRET);
-});
 
-doctorVisitSchema.pre('save',async function (){
+visitSchema.pre('save',async function (){
   if(this.isModified('accountant')){
     const acco = Employee.findById(this.accountant);
     this.token = jwt.sign({
@@ -611,15 +568,7 @@ doctorVisitSchema.pre('save',async function (){
     }, process.env.SECRET);
   }
 });
-selfVisitSchema.pre('save',async function (){
-  if(this.isModified('accountant')){
-    const acco = Employee.findById(this.accountant);
-    this.token = jwt.sign({
-      tokenId:this._id,
-      accountant:acco.institute,
-    }, process.env.SECRET);
-  }
-});
+
 // Pre-Save Hook
 entitySchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 10);
@@ -659,16 +608,15 @@ entitySchema.virtual('capabilities').get(function () {
 const Patient = mongoose.model('Patient', patientSchema);
 const Employee = mongoose.model('Employee', employeeSchema);
 const Doctor = mongoose.model('Doctor', doctorSchema);
-const PatientHistory = mongoose.model('PatientHistory', patientHistory);
+const PatientHistory = mongoose.model('PatientHistory', patientHistorySchema);
 const Entity = mongoose.model('Entity', entitySchema);
 const User = mongoose.model('User', userSchema);
-const SelfVisit = mongoose.model('SelfVisit', selfVisitSchema);
+const Visit = mongoose.model('Visit', visitSchema);
 const Appointment = mongoose.model('Appointment', appointmentSchema);
 const Therapy = mongoose.model('Therapy', therapySchema);
 const RadioTest = mongoose.model('Radio', radioTestSchema);
 const LabTest = mongoose.model('LabTest', labTestsSchema);
 const Drug = mongoose.model('Drug', drugSchema);
-const DoctorVisit = mongoose.model('DoctorVisit', doctorVisitSchema);
 const Diagnosis = mongoose.model('Diagnosis', diagnosisSchema);
 const Procedure = mongoose.model('Procedure', procedureSchema);
 const InsuranceComp = mongoose.model('InsuranceComp', insuranceCompSchema);
@@ -684,13 +632,12 @@ module.exports = {
   PatientHistory,
   Entity,
   User,
-  SelfVisit,
+  Visit,
   Appointment,
   Therapy,
   RadioTest,
   LabTest,
   Drug,
-  DoctorVisit,
   Diagnosis,
   Procedure,
   InsuranceComp,

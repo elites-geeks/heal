@@ -9,187 +9,233 @@ const db = require('../models/user');
 employeeRoute.get('/sub-requests/id', getAllRequestsHandler);
 employeeRoute.get('/requests/:id', getOneRequestHandler);
 // employeeRoute.post('/requests/:id', getOneRequestHandler);
-employeeRoute.get('/visits', getAllPendingVisitsHndlers);
+employeeRoute.get('/visits/:insuranceCompanyId', getAllPendingVisitsHndlers);
 employeeRoute.get('/visits/:id', getOneVistHandler);
-employeeRoute.post('/visits/:id', visitApprovalHandler);
+employeeRoute.put('/visits/:id', visitApprovalHandler);
 employeeRoute.post('/policies', addPoliciesHandler);
-employeeRoute.get('/policies', showAllPoliciesHandler);
-employeeRoute.get('/policies/:id' , getOnePolicyHandler);
-employeeRoute.put('/policies/:id' , modifyPolicyHandler);
-employeeRoute.delete('/policies/:id' , deletePolicyHandler);
-employeeRoute.get('/subscribers' , getAllSubscribreshandlers);
-employeeRoute.get('/subscribers/:id' , getOneSubscriberHandler);
-employeeRoute.delete('/subscribers/:id' , deleteSubscriberHandler);
+employeeRoute.get('/policies/:insuranceCompanyId', showAllPoliciesHandler);
+employeeRoute.get('/policies/:insuranceCompanyId/:policyId', getOnePolicyHandler);
+employeeRoute.put('/policies/:policyId', modifyPolicyHandler);
+employeeRoute.delete('/policies/:policyId', deletePolicyHandler);
+employeeRoute.get('/subscribers/:insCompId', getAllSubscribreshandlers);
+employeeRoute.get('/subscribers/:id', getOneSubscriberHandler);
+employeeRoute.delete('/subscribers/:insCompId/:patId', deleteSubscriberHandler);
 
 
-async function getAllRequestsHandler(req,res){
-  try{
-    let id=req.params.id;
-    let listOfSubscribtionReq =await db.subscribtionRequest.find({status:'pinding',insuranceComp:`${id}`});
-    const newList=  listOfSubscribtionReq.map(async (subscribe)=>{
-      const patient=await db.Patient.findById(subscribe.patientId);
-      const policy=await db.Policy.findById(subscribe.policy);
-      return {patient,policy};
-    });
-    res.status.send(newList);
+async function getAllRequestsHandler(req, res) {
+    try {
+        let id = req.params.id;
+        let listOfSubscribtionReq = await db.subscribtionRequest.find({
+            status: 'pinding',
+            insuranceComp: `${id}`
+        });
+        const newList = listOfSubscribtionReq.map(async (subscribe) => {
+            const patient = await db.Patient.findById(subscribe.patientId);
+            const policy = await db.Policy.findById(subscribe.policy);
+            return {
+                patient,
+                policy
+            };
+        });
+        res.status(200).send(newList);
 
-  }catch(err){
-    console.log(err);
-  }
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-async function getOneRequestHandler(req,res){
-  try{
-    let id=req.params.id;
-    const subReq=await db.subscribtionRequest.findById(id);
-    res.status.send(subReq);
-  }catch(err){
-    console.log(err);
-  }
+async function getOneRequestHandler(req, res) {
+    try {
+        let id = req.params.id;
+        const subReq = await db.subscribtionRequest.findById(id);
+        const patient = await db.Patient.findById(subReq.patientId);
+        const policy = await db.Policy.findById(subReq.policy);
+        const output = {
+            patient,
+            policy
+        }
+        res.status(200).json(JSON.stringify(output));
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-async function getAllPendingVisitsHndlers(req,res){
-  try{
-    const getAllPendingVisits=await db.VisitApprove.find({approval:'pinding'});
-    res.status(200).send(getAllPendingVisits);
+async function getAllPendingVisitsHndlers(req, res) {
+    try {
+        const getAllPendingVisits = await db.VisitApprove.find({
+            approval: 'pinding',
+            insuranceComp: req.params.insuranceCompanyId
+        });
+        res.status(200).json(JSON.stringify(getAllPendingVisits));
 
-  }catch(err){
-    console.log(err);
-  }
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-async function getOneVistHandler(req,res){
-  try{
-    let id=req.params.id;
-    const getOneDoctorVisit =await db.DoctorVisit.findById(id);
-    const getOneSelfVisit =await db.SelfVisit.findById(id);
-    if(getOneDoctorVisit){
-      res.status(200).send(getOneDoctorVisit);
-    }else if(getOneSelfVisit){
-      res.status(200).send(getOneSelfVisit);
+async function getOneVistHandler(req, res) {
+    try {
+        let id = req.params.id;
+        const getOneVisit = await db.Visit.findById(id);
+        const labtests = getOneVisit.lab.map(id => {
+            const labTest = await db.LabTest.findById(id);
+            return labTest;
+        });
+        const radioTests = getOneVisit.radio.map(id => {
+            const radioTest = await db.RadioTest.findById(id);
+            return radioTest;
+        });
+        const drugs = getOneVisit.drug.map(id => {
+            const drug = await db.Drug.findById(id);
+            return drug;
+        });
+        const therabies = getOneVisit.therapy.map(id => {
+            const therapy1 = await db.Therapy.findById(id);
+            return therapy1;
+        });
+        const diagnosis = await db.Diagnosis.findById(getOneVisit.diagnosis);
+        const output = {
+            labtests,
+            radioTests,
+            drugs,
+            therabies,
+            diagnosis
+        }
+        res.status(200).json(getOnJSON.stringify(output));
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function visitApprovalHandler(req, res) {
+    try {
+        let id = req.params.id;
+        let approval = req.body;
+        const approveVisit = await db.VisitApprove.findByIdAndUpdate(id, {
+            approval: approval
+        });
+        res.status(204).send(approveVisit);
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function addPoliciesHandler(req, res) {
+
+    try {
+        let {
+            offerCoverage,
+            offerName,
+            costPerYear,
+            costPerMonth,
+            patientsSubscribed
+        } = req.body;
+        console.log(req.body);
+        const newPolicy = new db.Policy({
+            offerCoverage: offerCoverage,
+            offerName: offerName,
+            costPerYear: costPerYear,
+            costPerMonth: costPerMonth,
+            patientsSubscribed: patientsSubscribed,
+        });
+        const savenewPolicy = await newPolicy.save();
+
+        res.status(201).send(savenewPolicy);
+    } catch (err) {
+        console.log(err);
     }
 
-  }catch(err){
-    console.log(err);
-  }
+}
+async function showAllPoliciesHandler(req, res) {
+    try {
+        const {
+            insuranceCompanyId
+        } = req.params;
+        const getCompany = await db.InsuranceComp.findById(insuranceCompanyId);
+        const allPolicies = getCompany.listOfPolicies;
+        res.status(200).json(JSON.stringify(allPolicies));
+    } catch (err) {
+        console.log(err);
+    }
+
 }
 
-async function visitApprovalHandler(req,res){
-  try{
-    let id=req.params.id;
-    let approval=req.body;
-    const approveDoctorVisit =await db.VisitApprove.findByIdAndUpdate(id,{approval:approval});
-    res.status(200).send(approveDoctorVisit);
-
-  }catch(err){
-    console.log(err);
-  }
+async function getOnePolicyHandler(req, res) {
+    try {
+        const {
+            insuranceCompanyId,
+            policyId
+        } = req.params;
+        const getInsurance = await db.InsuranceComp.find({
+            _id = insuranceCompanyId
+        });
+        const policy = getInsurance.listOfPolicies.find(policy => {
+            return policy._id == policyId;
+        });
+        res.status(200).send(policy);
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-async function addPoliciesHandler(req,res){
-
-  try{
-    let {company,offerCoverage,offerName,costPerYear,costPerMonth,patientsSubscribed}=req.body;
-    console.log(req.body);
-    const newPolicy = new db.Policy({
-      company:company,
-      offerCoverage:offerCoverage,
-      offerName:offerName,
-      costPerYear:costPerYear,
-      costPerMonth:costPerMonth,
-      patientsSubscribed:patientsSubscribed,
-    });
-    const savenewPolicy =await newPolicy.save();
-
-    res.status(201).send(savenewPolicy);
-  }catch(err){
-    console.log(err);
-  }
-  
+async function modifyPolicyHandler(req, res) {
+    const {
+        policyId
+    } = req.params;
+    try {
+        let obj = req.body;
+        const updatePolicy = await db.Policy.findByIdAndUpdate(policyId, obj);
+        res.status(204).send(updatePolicy);
+    } catch (err) {
+        console.log(err);
+    }
 }
-async function showAllPoliciesHandler(req,res){
-  try{
-    const getAllPolicies =await db.Policy.find();
-    res.status(200).send(getAllPolicies);
-  }catch(err){
-    console.log(err);
-  }
- 
+async function deletePolicyHandler(req, res) {
+    try {
+        let id = req.params.policyId;
+
+        const deletePolicy = await db.Policy.findByIdAndDelete(id);
+        res.status(204).send(deletePolicy);
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-async function getOnePolicyHandler(req,res){
-  try{
-    let id=req.params.id;
-    const getOnePolicy =await db.Policy.findById(id);
-    res.status(200).send(getOnePolicy);
-  }catch(err){
-    console.log(err);
-  }
+async function getAllSubscribreshandlers(req, res) {
+    const {
+        insCompId
+    } = req.params;
+    try {
+        const insComp = await db.InsuranceComp.findById(insCompId);
+        const subs = insComp.listOfSubscribers.map(subID => {
+            const sub = await db.Patient.findById(subID);
+            return sub;
+        });
+        res.status(200).json(JSON.stringify(subs));
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-async function modifyPolicyHandler(req,res){
-  try{
-    let id=req.params.id;
-    let obj=req.body;
-    const updatePolicy =await db.Policy.findByIdAndUpdate(id,obj);
-    res.status(200).send(updatePolicy);
-  }catch(err){
-    console.log(err);
-  }
+async function getOneSubscriberHandler(req, res) {
+    try {
+        let id = req.params.id;
+        const getOneSubscribres = await db.Patient.findById(id);
+        
+        res.status(200).json(JSON.stringify(getOneSubscribres));
+    } catch (err) {
+        console.log(err);
+    }
 }
-async function deletePolicyHandler(req,res){
-  try{
-    let id=req.params.id;
-      
-    const deletePolicy =await db.Policy.findByIdAndDelete(id);
-    res.status(200).send(deletePolicy);
-  }catch(err){
-    console.log(err);
-  }
+async function deleteSubscriberHandler(req, res) {
+  const {insCompId, patId} = req.params;
+    try {
+        const insComp = await db.InsuranceComp.findByIdAndUpdate(insCompId,{$pull:{_id:patId}});
+        res.status(204).send(JSON.stringify(insComp));
+    } catch (err) {
+        console.log(err);
+    }
 }
-
-async function getAllSubscribreshandlers(req,res){
-  try{
-    let arrayOfSubscribers=[];
-
-    const getAllSubscribres =await db.insuranceCompSchema.find();
-    getAllSubscribres.listOfSubscribers.forEach(getListOfSubscribers=>{
-      getListOfSubscribers.forEach(subscriber=>{
-        arrayOfSubscribers.push(subscriber);
-      });
-     
-    });
-    
-
-    res.status(200).send(arrayOfSubscribers);
-  }catch(err){
-    console.log(err);
-  }
-}
-
-async function getOneSubscriberHandler(req,res){
-  try{
-    let id=req.params.id;
-    let arrayOfSubscribers=[];
-
-    const getOneSubscribres =await db.insuranceCompSchema.findById(id);
-    getOneSubscribres.listOfSubscribers.forEach(getListOfSubscribers=>{
-      arrayOfSubscribers.push(getListOfSubscribers);
-    });
-    res.status(200).send(arrayOfSubscribers);
-  }catch(err){
-    console.log(err);
-  }
-}
-async function deleteSubscriberHandler(req,res){
-  try{
-    let id=req.params.id;
-
-    const delelteSubscribres =await db.insuranceCompSchema.findByIdAndUpdate(id,{listOfSubscribers:[]});
-   
-    res.status(200).send(delelteSubscribres);
-  }catch(err){
-    console.log(err);
-  }
-}
-module.exports=employeeRoute;
+module.exports = employeeRoute;

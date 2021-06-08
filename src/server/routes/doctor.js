@@ -3,7 +3,7 @@
 const express = require('express');
 const moment = require('moment')
 const doctorRoute = express.Router();
-const {Appointment , Patient , Doctor,Diagnosis,DoctorVisit} = require('../models/user')
+const {Appointment , Patient , Doctor,Diagnosis,Visit} = require('../models/user')
 
 doctorRoute.get('/appointment/:docid', getAppointmentHandler);
 doctorRoute.post('/diagnosis/:visitid', writeDiagnosisHandler);
@@ -24,7 +24,7 @@ async function getAppointmentHandler(req, res){
 }
 async function writeDiagnosisHandler(req, res){
     const visitId = req.params.visitid;
-    const visit = await DoctorVisit.findById(visitId);
+    const visit = await Visit.findById(visitId);
     const {doctor , patient} = visit;
     const timeWritten = moment().format('hh:mm');
     const {signs , symproms , finalDiagnosis} = req.body;
@@ -38,7 +38,7 @@ async function writeDiagnosisHandler(req, res){
         finalDiagnosis:finalDiagnosis
     });
     const saved =await newDig.saved();
-    const modifyvisit = await DoctorVisit.findByIdAndUpdate(visitId, {diagnosis:saved._id});
+    const modifyvisit = await Visit.findByIdAndUpdate(visitId, {diagnosis:saved._id});
     const dr = await Doctor.findById(doctor);
     const pat = await Patient.findById(patient);
     const ret = {
