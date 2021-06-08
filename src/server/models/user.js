@@ -149,6 +149,43 @@ const policySchema = mongoose.Schema({
     },
 });
 
+const visitSchema = mongoose.Schema({
+  appoitmentNum: {
+    type: String
+  },
+  patient: {
+    type: String,
+    required: true
+  },
+  doctor: {
+    type: String
+  },
+  diagnosis: {
+    type: String
+  },
+  lab: {
+    type: [String]
+  },
+  radio: {
+    type: [String]
+  },
+  drug: {
+    type: [String]
+  },
+  therapy: {
+    type: [String]
+  },
+  timeOpened: {
+    type: String,
+    required: true
+  },
+  timeEnded: {
+    type: String
+  },
+  accountant:{
+    type:String
+  }
+});
 const insuranceCompSchema = mongoose.Schema({
     profile: {
         type: instiuteSchema,
@@ -216,35 +253,31 @@ const doctorSchema = mongoose.Schema({
 });
 
 const patientHistorySchema = mongoose.Schema({
-    medicalState: {
-        type: [String],
-        required: true,
-    },
-    visits: {
-        type: [visitSchema],
-    }
+  medicalState: {
+    type: [String],
+    required: true,
+  },
+  visits: {
+    type: [visitSchema],
+  },  
 });
 
 const patientSchema = mongoose.Schema({
-    userProfile: {
-        type: userSchema,
-        required: true,
-    },
-    insuranceStatus: {
-        type: Boolean,
-        required: true,
-        default:false
-    },
-    insurancePolicy: {
-        type: String,
-    },
-    appointmentList: {
-        type: [String],
-    },
-    patientHistory: {
-        type: patientHistorySchema,
-        required: true
-    }
+  userProfile: {
+    type: userSchema,
+    required: true,
+  },
+  insuranceStatus: {
+    type: Boolean,
+    required: true,
+  },
+  insurancePolicy: {
+    type: String,
+  },
+  appointmentList: {
+    type: [String],
+  },
+  patientHistory:{type:patientHistorySchema}
 });
 
 const procedureSchema = mongoose.Schema({
