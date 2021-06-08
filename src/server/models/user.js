@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema({
         required: true,
     },
     date_of_birth: {
-        type: Date,
+        type: String,
         required: true,
     },
     firstname: {
@@ -123,7 +123,7 @@ const instiuteSchema = mongoose.Schema({
     type: {
         type: String,
         required: true,
-        enum: ['hospital', 'medical', 'insurance'],
+        enum: ['hospital', 'insurance'],
     },
 });
 
@@ -233,6 +233,7 @@ const patientSchema = mongoose.Schema({
     insuranceStatus: {
         type: Boolean,
         required: true,
+        default:false
     },
     insurancePolicy: {
         type: String,
