@@ -149,6 +149,43 @@ const policySchema = mongoose.Schema({
   },
 });
 
+const visitSchema = mongoose.Schema({
+  appoitmentNum: {
+    type: String
+  },
+  patient: {
+    type: String,
+    required: true
+  },
+  doctor: {
+    type: String
+  },
+  diagnosis: {
+    type: String
+  },
+  lab: {
+    type: [String]
+  },
+  radio: {
+    type: [String]
+  },
+  drug: {
+    type: [String]
+  },
+  therapy: {
+    type: [String]
+  },
+  timeOpened: {
+    type: String,
+    required: true
+  },
+  timeEnded: {
+    type: String
+  },
+  accountant:{
+    type:String
+  }
+});
 const insuranceCompSchema = mongoose.Schema({
   profile: {
     type: instiuteSchema,
@@ -490,43 +527,6 @@ const appointmentSchema = mongoose.Schema({
         required: true,
         enum: ['new', 'active', 'history', 'deleted', 'missed']
     }
-});
-const visitSchema = mongoose.Schema({
-  appoitmentNum: {
-    type: String
-  },
-  patient: {
-    type: String,
-    required: true
-  },
-  doctor: {
-    type: String
-  },
-  diagnosis: {
-    type: String
-  },
-  lab: {
-    type: [String]
-  },
-  radio: {
-    type: [String]
-  },
-  drug: {
-    type: [String]
-  },
-  therapy: {
-    type: [String]
-  },
-  timeOpened: {
-    type: String,
-    required: true
-  },
-  timeEnded: {
-    type: String
-  },
-  accountant:{
-    type:String
-  }
 });
 
 const visitApprove=mongoose.Schema({

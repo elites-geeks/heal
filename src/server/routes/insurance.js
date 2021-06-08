@@ -77,19 +77,19 @@ async function getOneVistHandler(req, res) {
     try {
         let id = req.params.id;
         const getOneVisit = await db.Visit.findById(id);
-        const labtests = getOneVisit.lab.map(id => {
+        const labtests = getOneVisit.lab.map( async id => {
             const labTest = await db.LabTest.findById(id);
             return labTest;
         });
-        const radioTests = getOneVisit.radio.map(id => {
+        const radioTests = getOneVisit.radio.map(async id => {
             const radioTest = await db.RadioTest.findById(id);
             return radioTest;
         });
-        const drugs = getOneVisit.drug.map(id => {
+        const drugs = getOneVisit.drug.map(async id => {
             const drug = await db.Drug.findById(id);
             return drug;
         });
-        const therabies = getOneVisit.therapy.map(id => {
+        const therabies = getOneVisit.therapy.map(async id => {
             const therapy1 = await db.Therapy.findById(id);
             return therapy1;
         });
@@ -169,7 +169,7 @@ async function getOnePolicyHandler(req, res) {
             policyId
         } = req.params;
         const getInsurance = await db.InsuranceComp.find({
-            _id = insuranceCompanyId
+            _id:insuranceCompanyId
         });
         const policy = getInsurance.listOfPolicies.find(policy => {
             return policy._id == policyId;
@@ -209,7 +209,7 @@ async function getAllSubscribreshandlers(req, res) {
     } = req.params;
     try {
         const insComp = await db.InsuranceComp.findById(insCompId);
-        const subs = insComp.listOfSubscribers.map(subID => {
+        const subs = insComp.listOfSubscribers.map(async subID => {
             const sub = await db.Patient.findById(subID);
             return sub;
         });
