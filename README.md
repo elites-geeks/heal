@@ -37,6 +37,15 @@
 ## Tests On Postman
 [tests](tests.md)
 
+## Tools 
+![tools](assets/node-express.png)
+![tools](assets/mongoDB.png)
+![tools](assets/markdown.jpg)
+![tools](assets/jest.png)
+![tools](assets/git-github.jpg)
+![tools](assets/slack.png)
+![tools](assets/zoom.jpg)
+![tools](assets/deskle.jpg)
 ## Tools and Technologies
 - Languages: JavaScript, markdown
 - Frameworks: express
