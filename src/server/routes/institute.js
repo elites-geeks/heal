@@ -1,7 +1,7 @@
 'use strict';
 
 const {Institute, Department, Employee} = require('../models/user');
-const {addEmployee} = require('../../middlewares/middleware');
+const {addEmployee , checkUsername} = require('../../middlewares/middleware');
 const express = require('express');
 
 const instituteRoute = express.Router();
@@ -9,7 +9,7 @@ const instituteRoute = express.Router();
 instituteRoute.post('/departments/:instituteid' , addDepartment);
 instituteRoute.get('/departments/:instituteid', getAllDepartments);
 instituteRoute.get('/departments/single/:depid' , getOneDepartment);
-instituteRoute.post('/department/employee',addEmployee, addNewEmployee);
+instituteRoute.post('/department/employee',checkUsername,addEmployee, addNewEmployee);
 instituteRoute.put('/department/employee/:empid/:depid', deleteNewEmployee);
 
 

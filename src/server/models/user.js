@@ -8,64 +8,64 @@ const {
 } = require('jquery');
 
 const entitySchema = mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  phone_number: {
-    type: Number,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    required: true,
-    enum: ['user', 'institute'],
-  },
+    username: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    phone_number: {
+        type: Number,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    role: {
+        type: String,
+        required: true,
+        enum: ['user', 'institute', 'admin'],
+    },
 });
 
 const userSchema = mongoose.Schema({
-  info: {
-    type: entitySchema,
-    required: true,
-  },
-  date_of_birth: {
-    type: String,
-    required: true,
-  },
-  firstname: {
-    type: String,
-    require: true,
-  },
-  lastname: {
-    type: String,
-    require: true,
-  },
-  gender: {
-    type: String,
-    enum: ['male', 'female'],
-    required: true,
-  },
-  img: {
-    type: String,
-    required: true,
-  },
-  country: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: true,
-    enum: ['patient', 'doctor', 'employee', 'admin'],
-  },
+    info: {
+        type: entitySchema,
+        required: true,
+    },
+    date_of_birth: {
+        type: String,
+        required: true,
+    },
+    firstname: {
+        type: String,
+        require: true,
+    },
+    lastname: {
+        type: String,
+        require: true,
+    },
+    gender: {
+        type: String,
+        enum: ['male', 'female'],
+        required: true,
+    },
+    img: {
+        type: String,
+        required: true,
+    },
+    country: {
+        type: String,
+        required: true,
+    },
+    type: {
+        type: String,
+        required: true,
+        enum: ['patient', 'doctor', 'employee'],
+    },
 });
 
 const employeeSchema = mongoose.Schema({
@@ -555,10 +555,12 @@ const visitApprove = mongoose.Schema({
 });
 
 entitySchema.virtual('token').get(function () {
-  let tokenObject = {
-    username: this.username,
-  };
-  return jwt.sign(tokenObject, process.env.SECRET);
+    let tokenObject = {
+        username: this.username,
+        role:this.role,
+        id:this._id,
+    };
+    return jwt.sign(tokenObject, process.env.SECRET);
 });
 
 visitSchema.virtual('token').get(function () {
