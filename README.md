@@ -1,5 +1,8 @@
 # heal
 
+## Deployment 
+[Heroku](https://elite-heal.herokuapp.com/)
+
 ## Wireframes
 
 [Figma wireframing project workspace](https://www.figma.com/file/gVzSAVW4epMERfJriZd2cw/HEAL)
@@ -19,7 +22,33 @@
 [Requirements Page](requirements.md)
 
 ## Domain Modeling
+![system modeling](assets/system-modeling.png)
 
 ## UML
 
-![UML](HEAL.png)
+![UML](assets/HEAL.png)
+
+## Database Entities
+![DB entities](assets/DB-Entities.jpeg)
+
+## Routes and flow diagrams
+[routes & Data flow diagrams](routes-flow.md)
+
+## Tests On Postman
+[tests](tests.md)
+
+## Tools 
+![tools](assets/node-express.png)
+![tools](assets/mongoDB.png)
+![tools](assets/markdown.jpg)
+![tools](assets/jest.png)
+![tools](assets/git-github.jpg)
+![tools](assets/slack.png)
+![tools](assets/zoom.jpg)
+![tools](assets/deskle.jpg)
+## Tools and Technologies
+- Languages: JavaScript, markdown
+- Frameworks: express
+- Runtime Environment: Node.js
+- npm packages: superagent, dotenv, mpngoose, @code-fellows/supergoose, jest , jsonwebtoken, socket.io, socket.io-client, moment, method-override, base-64, bcrypt
+- Tools: VSCode, Git, GitHub, Postman, WSL, rimo whitboard, Slack, Zoom
