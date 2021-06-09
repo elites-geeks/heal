@@ -19,7 +19,21 @@
 [Requirements Page](requirements.md)
 
 ## Domain Modeling
+![system modeling](assets/system-modeling.png)
 
 ## UML
 
-![UML](HEAL.png)
+![UML](assets/HEAL.png)
+
+## Database Entities
+![DB entities](assets/DB-Entities.jpeg)
+
+## Routes and flow diagrams
+[routes & Data flow diagrams](routes-flow.md)
+
+## Tools and Technologies
+- Languages: JavaScript, markdown
+- Frameworks: express
+- Runtime Environment: Node.js
+- npm packages: superagent, dotenv, mpngoose, @code-fellows/supergoose, jest , jsonwebtoken, socket.io, socket.io-client, moment, method-override, base-64, bcrypt
+- Tools: VSCode, Git, GitHub, Postman, WSL, rimo whitboard, Slack, Zoom
