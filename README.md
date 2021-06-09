@@ -34,6 +34,9 @@
 ## Routes and flow diagrams
 [routes & Data flow diagrams](routes-flow.md)
 
+## Tests On Postman
+[tests](tests.md)
+
 ## Tools and Technologies
 - Languages: JavaScript, markdown
 - Frameworks: express
