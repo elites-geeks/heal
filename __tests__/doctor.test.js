@@ -79,8 +79,8 @@ describe('Testing \'doctor\' routes: ', ()=> {
         y=  await patient.save();
 
         const appointmentObj1 = {
-            doctor: '1',
-            patient: '2',
+            doctor: x._id,
+            patient: y._id,
             time: '5:30 PM',
             date: '22/5/2020',
             status: 'new'
@@ -98,7 +98,7 @@ describe('Testing \'doctor\' routes: ', ()=> {
         await appointment1.save();
         await appointment2.save();
 
-        const res = await mockServer.get('/doctor/appointment/60bf9525a35d18223ac97249');
+        const res = await mockServer.get(`/doctor/appointment/${x.id}`);
         expect(res.status).toEqual(200);
     });
     it('Can write diagnosis', async ()=>{

@@ -8,8 +8,8 @@ const db = require('../models/user');
 
 employeeRoute.get('/sub-requests/:id', getAllRequestsHandler);
 employeeRoute.get('/requests/:id', getOneRequestHandler);
+employeeRoute.put('/requests/:id', doActionOnRequests);
 
-// employeeRoute.post('/requests/:id', getOneRequestHandler);
 employeeRoute.get('/visits/:insuranceCompanyId', getAllPendingVisitsHndlers);
 employeeRoute.get('/visit/:id', getOneVistHandler);
 employeeRoute.put('/visits/:id', visitApprovalHandler);
@@ -23,6 +23,16 @@ employeeRoute.delete('/policies/:policyId', deletePolicyHandler);
 employeeRoute.get('/subscribers/:insCompId', getAllSubscribreshandlers);
 employeeRoute.get('/subscriber/:id', getOneSubscriberHandler);
 employeeRoute.delete('/subscribers/:insCompId/:patId', deleteSubscriberHandler);
+
+async function doActionOnRequests(req,res){
+  const {id} = req.params;
+  try {
+    const actionMade = await db.subscribtionRequest.findOneAndUpdate({_id:id , status:'pinding'}, {status:req.body.status});
+    res.status(204).json(JSON.stringify(actionMade))
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
 async function getAllRequestsHandler(req, res) {
   try {
@@ -119,19 +129,14 @@ async function getOneVistHandler(req, res) {
 async function visitApprovalHandler(req, res) {
   try {
     let id = req.params.id;
-    let approval = req.body.status;
-    // console.log(approval)
-    // const approveVisit = await db.VisitApprove.findByIdAndUpdate(id, {
-    //     status: req.body.status
-    // });
-    const approveVisit = await db.VisitApprove.findById(id);
-    approveVisit.status=req.body.status;
-    const approving= await approveVisit.save();
-    //console.log('approveVisit',approving)
-    res.status(204).send(approving);
+    let {status} = req.body;
+    const approveVisit = await db.VisitApprove.findOneAndUpdate({_id:id , status:'pinding'}, {
+      status: status
+    });
+    res.status(204).json(JSON.stringify(approveVisit));
 
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
   }
 }
 
@@ -151,7 +156,6 @@ async function addPoliciesHandler(req, res) {
       offerName: offerName,
       costPerYear: costPerYear,
       costPerMonth: costPerMonth,
-      patientsSubscribed: patientsSubscribed,
     });
     const savenewPolicy = await newPolicy.save();
 
