@@ -29,6 +29,9 @@ const entitySchema = mongoose.Schema({
     required: true,
     enum: ['user', 'institute', 'admin'],
   },
+  parentId:{
+    type: String
+  }
 });
 
 const userSchema = mongoose.Schema({
@@ -205,23 +208,24 @@ const insuranceCompSchema = mongoose.Schema({
   },
 });
 const subscribtionRequestSchema = mongoose.Schema({
-  patientId: {
-    type: String,
-    required: true,
-  },
-  insuranceComp: {
-    type: String,
-    required: true,
-  },
-  policy: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    required: true,
-    enum: ['pinding', 'approved', 'rejected'],
-  },
+    patientId: {
+        type: String,
+        required: true,
+    },
+    insuranceComp: {
+        type: String,
+        required: true,
+    },
+    policy: {
+        type: String,
+        required: true,
+    },
+    status: {
+        type: String,
+        required: true,
+        enum: ['pinding', 'approved', 'rejected'],
+        default:'pinding'
+    },
 });
 const doctorSchema = mongoose.Schema({
   userProfile: {
@@ -243,9 +247,6 @@ const doctorSchema = mongoose.Schema({
   yearsOfExp: {
     type: Number,
     required: true,
-  },
-  listOfAccreditedInsuranceComp: {
-    type: [String],
   },
   appointmentList: {
     type: [String],
@@ -309,91 +310,91 @@ const procedureSchema = mongoose.Schema({
 });
 
 const labTestsSchema = mongoose.Schema({
-  procedure: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: ['paid', 'active', 'nonpaid', 'done', 'deleted'],
-    default: 'nonpaid',
-    required: true,
-  },
-  timeAdded: {
-    type: String,
-    required: true,
-  },
-  timeStart: {
-    type: String,
-  },
-  timeEnd: {
-    type: String,
-  },
-  patient: {
-    type: String,
-    required: true,
-  },
-  additionalNotes: {
-    type: [String],
-  },
-  result: {
-    type: String,
-  },
-  timeDeleted :{
-    type: String,
-  },
-  visitNum: {
-    type: String,
-    required: true,
-  },
-  doctorRequested: {
-    type: String,
-    required: true,
-  },
+    procedure: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ['paid', 'active', 'nonpaid', 'done', 'deleted'],
+        default: 'nonpaid',
+        required: true,
+    },
+    timeAdded: {
+        type: String,
+        required: true,
+    },
+    timeStart: {
+        type: String,
+    },
+    timeEnd: {
+        type: String,
+    },
+    patient: {
+        type: String,
+        required: true,
+    },
+    additionalNotes: {
+        type: [String],
+    },
+    result: {
+        type: String,
+    },
+    timeDeleted :{
+        type: String
+    },
+    visitNum: {
+        type: String,
+        required: true,
+    },
+    doctorRequested: {
+        type: String,
+        required: true,
+    },
 });
 const drugSchema = mongoose.Schema({
-  procedure: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: ['paid', 'active', 'nonpaid', 'done', 'deleted'],
-    required: true,
-  },
-  timeStart: {
-    type: String,
-  },
-  timeEnd: {
-    type: String,
-  },
-  patient: {
-    type: String,
-    required: true,
-  },
-  additionalNotes: {
-    type: [String],
-  },
-  route: {
-    type: String,
-    required: true,
-  },
-  dose: {
-    type: String,
-    required: true,
-  },
-  doctorRequested: {
-    type: String,
-    required: true,
-  },
-  timeAdded: {
-    type: String,
-    required: true,
-  },
-  visitNum: {
-    type: String,
-    required: true,
-  },
+    procedure: {
+        type: String,
+    },
+    status: {
+        type: String,
+        enum: ['paid', 'active', 'nonpaid', 'done', 'deleted'],
+        required: true,
+        default:'nonpaid'
+    },
+    timeStart: {
+        type: String,
+    },
+    timeEnd: {
+        type: String,
+    },
+    patient: {
+        type: String,
+        required: true,
+    },
+    additionalNotes: {
+        type: [String],
+    },
+    route: {
+        type: String,
+        required: true,
+    },
+    dose: {
+        type: String,
+        required: true,
+    },
+    doctorRequested: {
+        type: String,
+        required: true,
+    },
+    timeAdded: {
+        type: String,
+        required: true,
+    },
+    visitNum: {
+        type: String,
+        required: true,
+    },
 });
 
 const radioTestSchema = mongoose.Schema({
@@ -404,6 +405,7 @@ const radioTestSchema = mongoose.Schema({
     type: String,
     enum: ['paid', 'active', 'nonpaid', 'done', 'deleted'],
     required: true,
+    default:'nonpaid'
   },
   timeStart: {
     type: String,
@@ -456,6 +458,7 @@ const therapySchema = mongoose.Schema({
     type: String,
     enum: ['paid', 'active', 'nonpaid', 'done', 'deleted'],
     required: true,
+    default:'nonpaid'
   },
   timeAdded: {
     type: String,
@@ -535,23 +538,25 @@ const appointmentSchema = mongoose.Schema({
     type: String,
     required: true,
     enum: ['new', 'active', 'history', 'deleted', 'missed'],
+    default:'new'
   },
 });
 
 
 const visitApprove = mongoose.Schema({
-  visitNumber: {
-    type: String,
-    required: true,
-  },
-  insuranceComp: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: ['approved', 'notapproved', 'pinding'],
-  },
+    visitNumber: {
+        type: String,
+        required: true,
+    },
+    insuranceComp: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ['approved', 'notapproved', 'pinding'],
+        default:'pinding'
+    },
 });
 
 entitySchema.virtual('token').get(function () {
@@ -587,6 +592,10 @@ entitySchema.pre('save', async function (next) {
   next();
 });
 
+patientSchema.pre('save', function(next){
+  this.userProfile.info.parentId = this._id;
+  next();
+});
 
 entitySchema.statics.authenticateWithToken = async function (token) {
   try {
@@ -610,7 +619,7 @@ entitySchema.virtual('capabilities').get(function () {
     user: ['read'],
     writer: ['read', 'create'],
     editor: ['read', 'create', 'update'],
-    admin: ['read', 'create', 'update', 'delete'],
+    admin: ['addHospital', 'add', 'update', 'delete'],
   };
   return acl[this.role];
 });

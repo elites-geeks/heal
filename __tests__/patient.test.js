@@ -499,10 +499,10 @@ describe('Testing patient routes', () => {
       insuranceComp:insuranceComp1Saved.id,
       policy:policy1Saved.id,
     };
-    console.log('patientProfileSaved.id',patientProfileSaved.id)
-    console.log(':insuranceComp1Saved.id',insuranceComp1Saved.id)
-    console.log('policy1Saved.id',policy1Saved.id)
-    const output = await mockServer.post(`/patient/institute/subscribe`).send(obj);
+    console.log('patientProfileSaved.id',patientProfileSaved.id);
+    console.log(':insuranceComp1Saved.id',insuranceComp1Saved.id);
+    console.log('policy1Saved.id',policy1Saved.id);
+    const output = await mockServer.post(`/patient/insurance/subscribe`).send(obj);
     expect(output.status).toEqual(200);
   });
 });

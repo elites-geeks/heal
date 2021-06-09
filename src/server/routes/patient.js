@@ -3,6 +3,7 @@
 const express = require('express');
 const patientRoute = express.Router();
 const db=require('../models/user');
+const moment = require('moment');
 // Routes
 patientRoute.post('/visit', selfVisitHandler);
 patientRoute.get('/appointment/search' , appointmentSearchHandler);
@@ -11,18 +12,21 @@ patientRoute.get('/procedures/paid/:patientid' , paidProceduresHanler);
 patientRoute.get('/procedures/active/:patientid', activeProceduresHandler);
 patientRoute.get('/appointment/:patientid', appointmentGetHandler);
 //patientRoute.post('/procedures');
-patientRoute.post('/institute/subscribe', subscribeHandler);
+patientRoute.post('/insurance/subscribe', subscribeHandler);
+patientRoute.get('/insurance' ,getInsuranceCompanies);
 
-function getCurrentDate() {
-  let dateNow = new Date();
-  let dd = dateNow.getDate();
-  let monthSingleDigit = dateNow.getMonth() + 1,
-    mm = monthSingleDigit < 10 ? '0' + monthSingleDigit : monthSingleDigit;
-  let yy = dateNow.getFullYear().toString().substr(2);
-  return mm + '/' + dd + '/' + yy;
-}
-//patientRoute.
+
+
 // Routes handlers
+async function getInsuranceCompanies(req,res){
+  try {
+    const insComps = await db.InsuranceComp.find({});
+    res.status(200).json(insComps);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 async function selfVisitHandler(req,res){
   //let id=req.params.id;
   try{
@@ -30,7 +34,7 @@ async function selfVisitHandler(req,res){
     let {patient}=req.body;
     let newSelfVisit=new db.Visit({
       patient:patient,
-      timeOpened:getCurrentDate(),
+      timeOpened:moment().format(),
 
     });
     let saveSelfVisit=await newSelfVisit.save();

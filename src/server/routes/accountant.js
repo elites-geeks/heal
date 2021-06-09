@@ -95,4 +95,6 @@ async function getPatientServedHandler(req, res) {
     console.log(error.message);
   }
 }
-module.exports=accountantRoute;
+
+
+module.exports = accountantRoute;

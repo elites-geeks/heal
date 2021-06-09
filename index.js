@@ -14,14 +14,7 @@ const options = {
   useUnifiedTopology: true,
   useFindAndModify: false,
 };
-async function runServer(start) {
-  try {
-    await connect(MONGODB_URI, options);
-    console.log('Connected to the DATABASE');
-    // Start the web server
-    start(PORT);
-  }catch (err) {   
-    console.log(err.message, '\nCould not connect to the DataBase');
-  }
-}
-runServer(run);
+connect(MONGODB_URI, options).then(()=>{
+  console.log('Connected to the DATABASE');
+ run(PORT)
+});
