@@ -29,6 +29,8 @@ const drugperson=require('../server/routes/drugperson');
 const labperson=require('../server/routes/labperson');
 const radioperson=require('../server/routes/radioperson');
 const instiute=require('../server/routes/institute');
+const therapyperson=require('../server/routes/therapyperson');
+const admin=require('../server/routes/admin');
 // app.get('/', (req, res) => {
 //   res.sendFile('../../public/home.html');
 // });
@@ -58,6 +60,8 @@ app.use('/drug',drugperson);
 app.use('/lab',labperson);
 app.use('/radio',radioperson);
 app.use('/instiute',instiute);
+app.use('/therapyperson',therapyperson);
+app.use('/admin',admin);
 //app.use('/accountant',accountant);
 
 function run(PORT) {
