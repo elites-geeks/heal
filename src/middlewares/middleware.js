@@ -70,7 +70,7 @@ async function addDoctor(req, res, next) {
         });
         await user.save();
         const doc = new Doctor({
-          info: user,
+          userProfile: user,
           ...input,
         });
         const docSaved = await doc.save();
@@ -96,13 +96,15 @@ async function addPatient(req, res, next) {
       if (input.type == 'patient') {
         const ent = new Entity(input);
         await ent.save();
+        
         const user = new User({
           info: ent,
           ...input,
         });
         await user.save();
+        console.log(user);
         const pat = new Patient({
-          info: user,
+          userProfile: user,
           ...input,
         });
         const patSaved = await pat.save();
@@ -129,7 +131,7 @@ async function checkUsername(req, res, next) {
     const user = await Entity.find({
       username: username,
     });
-    if (!user) {
+    if (!user.username) {
       next();
     } else {
       next('Username already Exists');
@@ -178,8 +180,8 @@ async function getAllProcedures(req, res, next) {
 async function addHospital(req, res, next) {
   const input = req.body;
   try {
-    if (info.role == 'institute') {
-      if (info.type == 'hospital') {
+    if (input.role == 'institute') {
+      if (input.type == 'hospital') {
         const ent = new Entity(input);
         await ent.save();
         const institute = new Institute({

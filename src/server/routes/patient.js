@@ -126,4 +126,4 @@ async function subscribeHandler(req,res){
 
 
 
-module.exports={patientRoute};
+module.exports=patientRoute;

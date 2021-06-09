@@ -17,8 +17,10 @@ const drugperson=require('../server/routes/drugperson');
 const labperson=require('../server/routes/labperson');
 const radioperson=require('../server/routes/radioperson');
 const instiute=require('../server/routes/institute');
-
+const patient=require('../server/routes/patient.js');
+const admin = require('./routes/admin')
 const errorHandler = require('../middlewares/err/500.js');
+const { subscribe } = require('../server/routes/doctor.js');
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../../public')));
@@ -29,22 +31,16 @@ app.use(express.urlencoded({
 }));
 app.set('view engine' ,'ejs')
 
-
-// const patient=require('../server/routes/patient.js');
-
-app.get('/notification', (req, res) => {
-  res.render('index')
-});
 app.get('/', (req, res) => {
   res.render('index')
 });
+
 app.post('/signin', basic, (req, res) => {
   // const userRole = req.user.field? req.user.role+'/'+req.user.field : req.user.role;
-
-  console.log('Authintication done');
-  res.send(req.user);
-});
-app.post('/regesterUser', bearer, (req, res) => {
+  // console.log('Authintication done');
+  // const user = req.user;
+  // const tocken = req.user.tocken;
+  // res.send(req.user);
   const {
     user,
     token,
@@ -55,8 +51,11 @@ app.post('/regesterUser', bearer, (req, res) => {
   };
   res.send(output);
 });
+// app.post('/regesterUser', (req, res) => {
+  
+// });
 
-// app.use('/patient',patient);
+app.use('/patient',patient);
 app.use('/doctor',doctor);
 
 app.use('/insurance',insurance);
@@ -64,27 +63,23 @@ app.use('/drug',drugperson);
 app.use('/lab',labperson);
 app.use('/radio',radioperson);
 app.use('/instiute',instiute);
-//app.use('/accountant',accountant);
-
+app.use('/accountant',accountant);
+app.use('/admin' , admin)
 function run(PORT) {
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log('Server up on ', PORT);
   });
 }
 app.use('*', notFoundHandler);
 app.use(errorHandler);
 
-
-
-// const notif = io.of('/notification');
-// notif.on('connection',(socket)=>{
-//   socket.on('join', arg=>{
-//     console.log(arg);
-//   });
-// });
-
 io.on('connection', (socket) => {
   console.log("User Logged in " , socket.id);
+  
+  socket.on('test' , pay=>{
+    console.log(pay);
+    io.emit('test' , 'Welcooooome')
+  });
 })
 module.exports = {
   run,

@@ -33,6 +33,8 @@ async function basicAuthentication (req, res, next)  {
     const valid = await bcrypt.compare(password, user.password);
     if (valid) {
       req.user = user;
+      req.tocken = user.tocken;
+      console.log(user.tocken);
       next();
     }
     else {
