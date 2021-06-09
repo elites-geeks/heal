@@ -209,7 +209,7 @@ describe('therapy routing test', () => {
     });
     expect(res.status).toEqual(204);
   });
-
+ 
   it('get Visit Therapy', async ()=> {
     
     let res=await mockRequest.get(`/therapyperson/therapys/visit/${visitId}`);
@@ -224,6 +224,16 @@ describe('therapy routing test', () => {
   it('do Actions On The radio', async ()=> {
     
     let res=await mockRequest.patch(`/therapyperson/therapys/${therapySavedId}`).send({status:'active'});
+    expect(res.status).toEqual(204);
+  });
+  it('do Actions On The radio status done', async ()=> {
+    
+    let res=await mockRequest.patch(`/therapyperson/therapys/${therapySavedId}`).send({status:'done'});
+    expect(res.status).toEqual(204);
+  });
+  it('do Actions On The radio status deleted', async ()=> {
+    
+    let res=await mockRequest.patch(`/therapyperson/therapys/${therapySavedId}`).send({status:'deleted'});
     expect(res.status).toEqual(204);
   });
 });

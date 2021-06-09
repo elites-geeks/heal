@@ -89,7 +89,8 @@ async function updateOneTest(req, res) {
   try {
     const updated = await Procedure.findOneAndUpdate({_id:testId , type:'lab'}, req.body);
     if(updated){
-      res.status(204).json(JSON.stringify(updated));
+      console.log(updated);
+      res.status(204).json(updated);
     } else{
       throw new Error('Not A Lab Test');
     }

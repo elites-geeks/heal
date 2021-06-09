@@ -276,4 +276,14 @@ describe('drug routing test', () => {
     let res=await mockRequest.patch(`/drug/drugs/${drugId}`).send({status:'active'});
     expect(res.status).toEqual(204);
   });
+  it('do Actions On The Drug status done', async ()=> {
+    
+    let res=await mockRequest.patch(`/drug/drugs/${drugId}`).send({status:'done'});
+    expect(res.status).toEqual(204);
+  });
+  it('do Actions On The Drug status deleted', async ()=> {
+    
+    let res=await mockRequest.patch(`/drug/drugs/${drugId}`).send({status:'deleted'});
+    expect(res.status).toEqual(204);
+  });
 });

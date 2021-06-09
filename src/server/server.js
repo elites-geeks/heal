@@ -62,7 +62,7 @@ app.use('/radio',radioperson);
 app.use('/instiute',instiute);
 app.use('/therapyperson',therapyperson);
 app.use('/admin',admin);
-//app.use('/accountant',accountant);
+app.use('/accountant',accountant);
 
 function run(PORT) {
   app.listen(PORT, () => {

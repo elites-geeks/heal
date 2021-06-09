@@ -306,7 +306,14 @@ describe('insurance routing test', () => {
     expect(res.status).toEqual(200);
   
   });
+  it('error get One visit Pending Visits', async ()=> {
 
+    let res=await mockRequest.get(`/insurance/visqit/${visitId}`);
+    //console.log(res.body)
+
+    expect(res.status).toEqual(404);
+  
+  });
   it('update visit Pending Visits to approval', async ()=> {
 
     let res=await mockRequest.put(`/insurance/visits/${VisitApproveId}`).send({status:'approved'});
