@@ -3,10 +3,9 @@
 const express = require('express');
 const adminRoute = express.Router();
 const {addDoctor , addHospital ,addInsurance, checkUsername , addPatient} = require('../../middlewares/middleware')
-const bearer = require('../../middlewares/auth/bearer');
 adminRoute.post('/doctor',checkUsername,addDoctor , addNewDoctor);
 adminRoute.post('/hospital', checkUsername,addHospital,addNewHospital);
-adminRoute.post('/insurance',bearer , checkUsername , addInsurance , addNewInsurance);
+adminRoute.post('/insurance' , checkUsername , addInsurance , addNewInsurance);
 adminRoute.post('/patient', addPatient , addNewPateint);
 async function addNewInsurance(req , res){
     const {newInsComp} = req;
@@ -17,7 +16,7 @@ async function addNewHospital(req , res){
     res.status(201).json(newHospital)
 }
 async function addNewDoctor(req , res){
-    const {newDoctor} = req;;
+    const {newDoctor} = req;
     res.status(201).json(newDoctor);
 }
 

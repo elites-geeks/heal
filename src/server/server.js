@@ -1,15 +1,19 @@
 'use strict';
 
+// Initializing the server with the socket -----------------
+
 const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const morgan = require('morgan');
-const basic = require('../middlewares/auth/basic');
-const bearer = require('../middlewares/auth/bearer');
-const notFoundHandler = require('../middlewares/err/404');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+
+// Requiring error handlers ----------------------
+
+const errorHandler = require('../middlewares/err/500.js');
+const notFoundHandler = require('../middlewares/err/404');
+
+// requiring routes ------------------------
+
 const doctor=require('../server/routes/doctor.js');
 const insurance=require('../server/routes/insurance');
 const accountant=require('../server/routes/accountant');
@@ -19,9 +23,15 @@ const radioperson=require('../server/routes/radioperson');
 const instiute=require('../server/routes/institute');
 const patient=require('../server/routes/patient.js');
 const admin = require('./routes/admin')
-const errorHandler = require('../middlewares/err/500.js');
-const { subscribe } = require('../server/routes/doctor.js');
+const therapyperson=require('../server/routes/therapyperson');
 
+// Requiring middlewares ------------------
+
+const cors = require('cors');
+const path = require('path');
+const morgan = require('morgan');
+
+// server setup ------------------------------------
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../../public')));
 app.use(morgan('dev'));
@@ -31,16 +41,26 @@ app.use(express.urlencoded({
 }));
 app.set('view engine' ,'ejs')
 
+// Using routes ---------------------------------------
+
+app.use('/doctor',doctor);
+app.use('/insurance',insurance);
+app.use('/accountant',accountant);
+app.use('/drug',drugperson);
+app.use('/lab',labperson);
+app.use('/radio',radioperson);
+app.use('/instiute',instiute);
+app.use('/patient',patient);
+app.use('/admin' , admin)
+app.use('/therapyperson',therapyperson);
+
+// Some routes for the home page ------------------------
+
 app.get('/', (req, res) => {
   res.render('index')
 });
 
-app.post('/signin', basic, (req, res) => {
-  // const userRole = req.user.field? req.user.role+'/'+req.user.field : req.user.role;
-  // console.log('Authintication done');
-  // const user = req.user;
-  // const tocken = req.user.tocken;
-  // res.send(req.user);
+app.post('/signin', (req, res) => {
   const {
     user,
     token,
@@ -51,27 +71,20 @@ app.post('/signin', basic, (req, res) => {
   };
   res.send(output);
 });
-// app.post('/regesterUser', (req, res) => {
-  
-// });
+// Using Error handlers ----------------------------------
 
-app.use('/patient',patient);
-app.use('/doctor',doctor);
+app.use('*', notFoundHandler);
+app.use(errorHandler);
 
-app.use('/insurance',insurance);
-app.use('/drug',drugperson);
-app.use('/lab',labperson);
-app.use('/radio',radioperson);
-app.use('/instiute',instiute);
-app.use('/accountant',accountant);
-app.use('/admin' , admin)
+// Runing the server and the database --------------------
+
 function run(PORT) {
   server.listen(PORT, () => {
     console.log('Server up on ', PORT);
   });
 }
-app.use('*', notFoundHandler);
-app.use(errorHandler);
+
+// Connecting to the socket ------------------------------
 
 io.on('connection', (socket) => {
   console.log("User Logged in " , socket.id);
@@ -81,6 +94,8 @@ io.on('connection', (socket) => {
     io.emit('test' , 'Welcooooome')
   });
 })
+
+// exporing ------------------------------------
 module.exports = {
   run,
   app,

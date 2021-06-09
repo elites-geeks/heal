@@ -17,9 +17,12 @@ const {
 } = require('../server/models/user');
 async function addEmployee(req, res, next) {
   try {
+    console.log('add employee');
     const input = req.body;
+  
     if (input.role == 'user') {
       if (input.type == 'employee') {
+        console.log(input.type);
         const ent = new Entity(input);
         await ent.save();
         const user = new User({
@@ -41,33 +44,39 @@ async function addEmployee(req, res, next) {
           },
         });
         if (!addToDep) {
+          console.log('No department to add the employee');
           next('No department to add the employee');
         }
         req.newEmployee = empSaved;
         next();
       } else {
+        console.log('Not An Employee');
         next('Not An Employee');
       }
     } else {
+      console.log('Not A User');
       next('Not A User');
     }
   } catch (error) {
+    console.log(error);
     console.log(error.message);
   }
 }
 
 async function addDoctor(req, res, next) {
   try {
-
+    // console.log(req.body);
     const input = req.body;
     if (input.role == 'user') {
       if (input.type == 'doctor') {
         const ent = new Entity(input);
+        //console.log('ent',ent);
         await ent.save();
         const user = new User({
           info: ent,
           ...input,
         });
+        //console.log('user',user);
         await user.save();
         const doc = new Doctor({
           userProfile: user,
@@ -75,14 +84,18 @@ async function addDoctor(req, res, next) {
         });
         const docSaved = await doc.save();
         req.newDoctor = docSaved;
+        console.log(req.newDoctor);
         next();
       } else {
+        console.log('Not a doctor');
         next('Not a doctor');
       }
     } else {
+      console.log('Not a User');
       next('Not A User');
     }
   } catch (error) {
+    console.log(error);
     console.log(error.message);
   }
 }
@@ -109,6 +122,7 @@ async function addPatient(req, res, next) {
         });
         const patSaved = await pat.save();
         req.newPatient = patSaved;
+        
         next();
       } else {
         next('Not a patient');
@@ -128,6 +142,7 @@ async function checkUsername(req, res, next) {
     username,
   } = req.body;
   try {
+    //console.log(req.body);
     const user = await Entity.find({
       username: username,
     });
@@ -205,8 +220,8 @@ async function addHospital(req, res, next) {
 async function addInsurance(req, res, next) {
   const input = req.body;
   try {
-    if (info.role == 'institute') {
-      if (info.type == 'insurance') {
+    if (input.role == 'institute') {
+      if (input.type == 'insurance') {
         const ent = new Entity(input);
         await ent.save();
         const institute = new Institute({

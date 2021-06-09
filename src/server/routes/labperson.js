@@ -122,7 +122,7 @@ async function getOneTest(req, res) {
     if(test.type!=='lab'){
       throw new Error('Not A Lab Test');
     }
-    res.status(200).json(JSON.stringify(test));
+    res.status(200).json(test);
   } catch (err) {
     console.log(err.message);
   }
@@ -133,7 +133,7 @@ async function getAlltests(req, res) {
     const tests = await Procedure.find({
       type: 'lab',
     });
-    res.status(200).json(JSON.stringify(tests));
+    res.status(200).json(tests);
   } catch (error) {
     console.log(error.message);
   }
@@ -146,7 +146,7 @@ async function addNewTest(req, res) {
   const newTest = new Procedure(newTestInput);
   try {
     const savedTest = await newTest.save();
-    res.status(201).json(JSON.stringify(savedTest));
+    res.status(201).json(savedTest);
   } catch (error) {
     console.log(error.message);
   }
