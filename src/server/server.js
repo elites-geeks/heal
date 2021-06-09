@@ -1,30 +1,103 @@
 'use strict';
 
+// Initializing the server with the socket -----------------
+
 const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
+// Requiring error handlers ----------------------
+
+const errorHandler = require('../middlewares/err/500.js');
+const notFoundHandler = require('../middlewares/err/404');
+
+// requiring routes ------------------------
+
+const doctor=require('../server/routes/doctor.js');
+const insurance=require('../server/routes/insurance');
+const accountant=require('../server/routes/accountant');
+const drugperson=require('../server/routes/drugperson');
+const labperson=require('../server/routes/labperson');
+const radioperson=require('../server/routes/radioperson');
+const instiute=require('../server/routes/institute');
+const patient=require('../server/routes/patient.js');
+const admin = require('./routes/admin')
+const therapyperson=require('../server/routes/therapyperson');
+
+// Requiring middlewares ------------------
+
 const cors = require('cors');
 const path = require('path');
-const superagent = require('superagent');
-const methodOverride = require('method-override');
-const app = express();
+const morgan = require('morgan');
+const basic = require('../middlewares/auth/basic')
+
+// server setup ------------------------------------
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../../public')));
-app.use(methodOverride('_method'));
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '../../views'));
-app.use(express.urlencoded({
-    extended: true
-}));
+app.use(morgan('dev'));
 app.use(express.json());
+app.use(express.urlencoded({
+  extended: true,
+}));
+app.set('view engine' ,'ejs')
+
+// Using routes ---------------------------------------
+
+app.use('/doctor',doctor);
+app.use('/insurance',insurance);
+app.use('/accountant',accountant);
+app.use('/drug',drugperson);
+app.use('/lab',labperson);
+app.use('/radio',radioperson);
+app.use('/instiute',instiute);
+app.use('/patient',patient);
+app.use('/admin' , admin);
+app.use('/therapyperson',therapyperson);
+
+// Some routes for the home page ------------------------
+
 app.get('/', (req, res) => {
-    res.render('pages/home')
+  res.render('index')
 });
 
+app.post('/signin',basic, (req, res) => {
+  const {
+    user,
+    token,
+  } = req;
+  const output = {
+    user,
+    token,
+  };
+  res.json(output);
+});
+// Using Error handlers ----------------------------------
+
+app.use('*', notFoundHandler);
+app.use(errorHandler);
+
+// Runing the server and the database --------------------
+
 function run(PORT) {
-    app.listen(PORT, () => {
-        console.log("Server up on ", PORT);
-    });
+  server.listen(PORT, () => {
+    console.log('Server up on ', PORT);
+  });
 }
+
+// Connecting to the socket ------------------------------
+
+io.on('connection', (socket) => {
+  console.log("User Logged in " , socket.id);
+  
+  socket.on('test' , pay=>{
+    console.log(pay);
+    io.emit('test' , 'Welcooooome')
+  });
+})
+
+// exporing ------------------------------------
 module.exports = {
-    run,
-    app
-}
+  run,
+  app,
+};
