@@ -4,7 +4,7 @@ const express = require('express');
 const patientRoute = express.Router();
 const db=require('../models/user');
 // Routes
-patientRoute.post('/new-visit/self', selfVisitHandler);
+patientRoute.post('/visit', selfVisitHandler);
 patientRoute.get('/appointment/search' , appointmentSearchHandler);
 patientRoute.get('/procedures/pending/:patientid' , pendingProceduresHandler);
 patientRoute.get('/procedures/paid/:patientid' , paidProceduresHanler);
@@ -28,7 +28,7 @@ async function selfVisitHandler(req,res){
   try{
 
     let {paitent,lab,radio,drug,therapy}=req.body;
-    let newSelfVisit=new db.SelfVisit({
+    let newSelfVisit=new db.Visit({
       paitent:paitent,
       lab:lab,
       radio:radio,
@@ -43,6 +43,7 @@ async function selfVisitHandler(req,res){
     console.log(error);
   }
 }
+
 async function appointmentSearchHandler(req,res){
 
 }
@@ -126,4 +127,4 @@ async function subscribeHandler(req,res){
 
 
 
-module.exports={patientRoute};
+module.exports=patientRoute;

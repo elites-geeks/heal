@@ -21,7 +21,7 @@ app.use(express.urlencoded({
 
 
 
-// const patient=require('../server/routes/patient.js');
+const patient=require('../server/routes/patient.js');
 const doctor=require('../server/routes/doctor.js');
 const insurance=require('../server/routes/insurance');
 const accountant=require('../server/routes/accountant');
@@ -50,7 +50,7 @@ app.post('/regesterUser', bearer, (req, res) => {
   res.send(output);
 });
 
-// app.use('/patient',patient);
+app.use('/patient',patient);
 app.use('/doctor',doctor);
 
 app.use('/insurance',insurance);
