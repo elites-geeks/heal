@@ -58,7 +58,7 @@ app.use('/therapyperson',therapyperson);
 // Some routes for the home page ------------------------
 
 app.get('/', (req, res) => {
-  res.render('index')
+  res.status(200).render('index')
 });
 
 app.post('/signin',basic, (req, res) => {
@@ -70,7 +70,7 @@ app.post('/signin',basic, (req, res) => {
     user,
     token,
   };
-  res.json(output);
+  res.status(201).json(output);
 });
 // Using Error handlers ----------------------------------
 

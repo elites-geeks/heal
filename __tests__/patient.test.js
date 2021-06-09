@@ -416,7 +416,10 @@ describe('Testing patient routes', () => {
     const output = await mockServer.get(`/patient/appointment/${res._id}`);
     expect(output.status).toEqual(200);
   });
-
+it('should return a status of 200',async () => {
+  const res = await mockServer.get('/patient/insurance');
+  expect(res.status).toEqual(200);
+});
   it('subscribe Handler', async()=>{
 
     let entityPatient={
