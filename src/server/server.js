@@ -30,6 +30,7 @@ const therapyperson=require('../server/routes/therapyperson');
 const cors = require('cors');
 const path = require('path');
 const morgan = require('morgan');
+const basic = require('../middlewares/auth/basic')
 
 // server setup ------------------------------------
 app.use(cors());
@@ -60,7 +61,7 @@ app.get('/', (req, res) => {
   res.render('index')
 });
 
-app.post('/signin', (req, res) => {
+app.post('/signin',basic, (req, res) => {
   const {
     user,
     token,
@@ -69,7 +70,7 @@ app.post('/signin', (req, res) => {
     user,
     token,
   };
-  res.send(output);
+  res.json(output);
 });
 // Using Error handlers ----------------------------------
 

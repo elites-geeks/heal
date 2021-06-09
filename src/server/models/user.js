@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 const {
   trim,
 } = require('jquery');
-const { propfind } = require('../routes/doctor');
 
 const entitySchema = mongoose.Schema({
   username: {
@@ -30,6 +29,9 @@ const entitySchema = mongoose.Schema({
     required: true,
     enum: ['user', 'institute', 'admin'],
   },
+  parentId:{
+    type: String
+  }
 });
 
 const userSchema = mongoose.Schema({
@@ -245,9 +247,6 @@ const doctorSchema = mongoose.Schema({
   yearsOfExp: {
     type: Number,
     required: true,
-  },
-  listOfAccreditedInsuranceComp: {
-    type: [String],
   },
   appointmentList: {
     type: [String],
@@ -593,6 +592,10 @@ entitySchema.pre('save', async function (next) {
   next();
 });
 
+patientSchema.pre('save', function(next){
+  this.userProfile.info.parentId = this._id;
+  next();
+});
 
 entitySchema.statics.authenticateWithToken = async function (token) {
   try {
@@ -616,7 +619,7 @@ entitySchema.virtual('capabilities').get(function () {
     user: ['read'],
     writer: ['read', 'create'],
     editor: ['read', 'create', 'update'],
-    admin: ['read', 'create', 'update', 'delete'],
+    admin: ['addHospital', 'add', 'update', 'delete'],
   };
   return acl[this.role];
 });
