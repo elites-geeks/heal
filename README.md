@@ -1,5 +1,8 @@
 # heal
 
+## Deployment 
+[Heroku](https://elite-heal.herokuapp.com/)
+
 ## Wireframes
 
 [Figma wireframing project workspace](https://www.figma.com/file/gVzSAVW4epMERfJriZd2cw/HEAL)
