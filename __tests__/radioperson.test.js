@@ -191,7 +191,17 @@ describe('radio routing test', () => {
     let res=await mockRequest.patch(`/radio/tests/${radioId}`).send({status:'active'});
     expect(res.status).toEqual(204);
   });
-
+  it('do Actions On The radio status done', async ()=> {
+    
+    let res=await mockRequest.patch(`/radio/tests/${radioId}`).send({status:'done'});
+    expect(res.status).toEqual(204);
+  });
+  it('do Actions On The radio status deleted', async ()=> {
+    
+    let res=await mockRequest.patch(`/radio/tests/${radioId}`).send({status:'deleted'});
+    expect(res.status).toEqual(204);
+  });
+ 
   it('delete One radio', async ()=> {
     const procedureObj = {
       name: 'xray',

@@ -227,6 +227,7 @@ describe('lab routing test', () => {
       expectedTime: '30 min',
       
     });
+    console.log(res.body);
     expect(res.status).toEqual(204);
   });
 
@@ -241,6 +242,16 @@ describe('lab routing test', () => {
   it('do Actions On The lab', async ()=> {
     
     let res=await mockRequest.patch(`/lab/tests/${labId}`).send({status:'active'});
+    expect(res.status).toEqual(204);
+  });
+  it('do Actions On The lab status done', async ()=> {
+    
+    let res=await mockRequest.patch(`/lab/tests/${labId}`).send({status:'done'});
+    expect(res.status).toEqual(204);
+  });
+  it('do Actions On The lab status deleted', async ()=> {
+    
+    let res=await mockRequest.patch(`/lab/tests/${labId}`).send({status:'deleted'});
     expect(res.status).toEqual(204);
   });
 });

@@ -31,13 +31,9 @@ async function selfVisitHandler(req,res){
   //let id=req.params.id;
   try{
 
-    let {paitent,lab,radio,drug,therapy}=req.body;
+    let {patient}=req.body;
     let newSelfVisit=new db.Visit({
-      paitent:paitent,
-      lab:lab,
-      radio:radio,
-      drug:drug,
-      therapy:therapy,
+      patient:patient,
       timeOpened:moment().format(),
 
     });
@@ -107,11 +103,12 @@ async function subscribeHandler(req,res){
   try{
 
     let {patientId,insuranceComp,policy}=req.body;
+    // console.log(req.body);
     let newSubscribtionRequest=new db.subscribtionRequest({
       patientId:patientId,
       insuranceComp:insuranceComp,
       policy:policy,
-      status:'pending',
+      status:'pinding',
 
     });
     let saveSubsicribe=await newSubscribtionRequest.save();

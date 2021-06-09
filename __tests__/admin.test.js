@@ -73,4 +73,39 @@ describe('admin routing test', () => {
     
     expect(res.status).toEqual(201);
   });
+  it('error add New Insurance', async ()=> {
+
+    const newInsurance ={
+      username:'ammanhospital',
+      password: '1234',
+      phone_number: 353465756,
+      email:'sf@age',
+      role: 'user',
+      name : 'hospital',
+      location: 'amman',
+      type:'insurance', 
+    };
+
+    let res=await mockRequest.post(`/admin/insurance`).send(newInsurance);
+    
+    expect(res.status).toEqual(500);
+  });
+
+  it('add New Insurance', async ()=> {
+
+    const newInsurance ={
+      username:'ammanhospital',
+      password: '1234',
+      phone_number: 353465756,
+      email:'sf@age',
+      role: 'institute',
+      name : 'hospital',
+      location: 'amman',
+      type:'ali', 
+    };
+
+    let res=await mockRequest.post(`/admin/insurance`).send(newInsurance);
+    
+    expect(res.status).toEqual(500);
+  });
 });

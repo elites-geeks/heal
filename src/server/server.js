@@ -52,7 +52,7 @@ app.use('/lab',labperson);
 app.use('/radio',radioperson);
 app.use('/instiute',instiute);
 app.use('/patient',patient);
-app.use('/admin' , admin)
+app.use('/admin' , admin);
 app.use('/therapyperson',therapyperson);
 
 // Some routes for the home page ------------------------
