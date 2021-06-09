@@ -8,7 +8,6 @@ const {
     RadioTest,
     Drug,
     Therapy,
-    Visit,
     Patient
 } = require('../models/user');
 const accountantRoute = express.Router();
@@ -42,22 +41,22 @@ async function confirmPaymentHandler(req, res) {
                 patientsServed: visit.patient
             }
         })
-        visit.lab.forEach(id => {
+        visit.lab.forEach(async id => {
             await LabTest.findByIdAndUpdate(id, {
                 status: 'paid'
             })
         });
-        visit.radio.forEach(id => {
+        visit.radio.forEach(async id => {
             await RadioTest.findByIdAndUpdate(id, {
                 status: 'paid'
             })
         });
-        visit.drug.forEach(id => {
+        visit.drug.forEach(async id => {
             await Drug.findByIdAndUpdate(id, {
                 status: 'paid'
             })
         });
-        visit.therapy.forEach(id => {
+        visit.therapy.forEach(async id => {
             await Therapy.findByIdAndUpdate(id, {
                 status: 'paid'
             })
