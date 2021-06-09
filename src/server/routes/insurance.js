@@ -41,19 +41,23 @@ async function getAllRequestsHandler(req, res) {
       status: 'pinding',
       insuranceComp: id,
     });
-  
-    const newList =await listOfSubscribtionReq.map(async (subscribe) => {
-    const patient = await db.Patient.findById(subscribe.patientId);
-    const policy = await db.Policy.findById(subscribe.policy);
+    //console.log('listOfSubscribtionReq',listOfSubscribtionReq)
+    const newList =await Promise.all(listOfSubscribtionReq.map(async (subscribe) => {
+      const patient = await db.Patient.findById(subscribe.patientId);
+      const policy = await db.Policy.findById(subscribe.policy);
+      //console.log('patient',patient)
+      //console.log('policy',policy)
       return {
         patient,
         policy,
       };
-    });    
+    })); 
+
+    //console.log('newList',newList);
 
     res.status(200).send(newList);
   } catch (err) {
-
+    console.log(err);
   }
 }
 
@@ -69,6 +73,7 @@ async function getOneRequestHandler(req, res) {
     };
     res.status(200).json(output);
   } catch (err) {
+    console.log(err);
   }
 }
 
@@ -78,9 +83,11 @@ async function getAllPendingVisitsHndlers(req, res) {
       approval: 'pinding',
       insuranceComp: req.params.insuranceCompanyId,
     });
+    // console.log(getAllPendingVisits)
     res.status(200).json(JSON.stringify(getAllPendingVisits));
 
   } catch (err) {
+    console.log(err);
   }
 }
 
@@ -115,6 +122,7 @@ async function getOneVistHandler(req, res) {
     res.status(200).json(JSON.stringify(output));
 
   } catch (err) {
+    console.log(err);
   }
 }
 
@@ -142,6 +150,7 @@ async function addPoliciesHandler(req, res) {
       costPerMonth,
       patientsSubscribed,
     } = req.body;
+    //console.log(req.body);
     const newPolicy = new db.Policy({
       offerCoverage: offerCoverage,
       offerName: offerName,
@@ -152,6 +161,7 @@ async function addPoliciesHandler(req, res) {
 
     res.status(201).send(savenewPolicy);
   } catch (err) {
+    console.log(err);
   }
 
 }
@@ -164,6 +174,7 @@ async function showAllPoliciesHandler(req, res) {
     const allPolicies = getCompany.listOfPolicies;
     res.status(200).json(allPolicies);
   } catch (err) {
+    console.log(err);
   }
 
 }
@@ -174,13 +185,16 @@ async function getOnePolicyHandler(req, res) {
       insuranceCompanyId,
       policyId,
     } = req.params;
-    
+    // const getInsurance = await db.InsuranceComp.find({
+    //   _id : insuranceCompanyId,
+    // });
     const getInsurance = await db.InsuranceComp.findById(insuranceCompanyId);
     const policy = getInsurance.listOfPolicies.find(policy => {
       return policy._id == policyId;
     });
     res.status(200).send(policy);
   } catch (err) {
+    console.log(err);
   }
 }
 
@@ -191,8 +205,10 @@ async function modifyPolicyHandler(req, res) {
   try {
     let obj = req.body;
     const updatePolicy = await db.Policy.findByIdAndUpdate(policyId, obj);
+    // console.log(updatePolicy)
     res.status(204).send(updatePolicy);
   } catch (err) {
+    console.log(err);
   }
 }
 async function deletePolicyHandler(req, res) {
@@ -202,6 +218,7 @@ async function deletePolicyHandler(req, res) {
     const deletePolicy = await db.Policy.findByIdAndDelete(id);
     res.status(204).send(deletePolicy);
   } catch (err) {
+    console.log(err);
   }
 }
 
@@ -218,6 +235,7 @@ async function getAllSubscribreshandlers(req, res) {
    
     res.status(200).json(subs);
   } catch (err) {
+    console.log(err);
   }
 }
 
@@ -228,6 +246,7 @@ async function getOneSubscriberHandler(req, res) {
         
     res.status(200).json(getOneSubscribres);
   } catch (err) {
+    console.log(err);
   }
 }
 async function deleteSubscriberHandler(req, res) {
@@ -236,6 +255,9 @@ async function deleteSubscriberHandler(req, res) {
     const insComp = await db.InsuranceComp.findByIdAndUpdate(insCompId,{$pull:{listOfSubscribers:patId}});
     res.status(204).send(JSON.stringify(insComp));
   } catch (err) {
+    console.log(err);
   }
 }
 module.exports = employeeRoute;
+
+

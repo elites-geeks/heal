@@ -4,25 +4,25 @@ const express = require('express');
 const moment = require('moment');
 const bearer = require('../../middlewares/auth/bearer');
 const doctorRoute = express.Router();
-const {Appointment , Patient , Doctor, Diagnosis, Visit} = require('../models/user')
+const {Appointment , Patient , Doctor, Diagnosis, Visit} = require('../models/user');
 
-doctorRoute.get('/appointments/:docid', getAppointmentHandler);
-// doctorRoute.get('/appointment/:id' , getOneAppointment);
+doctorRoute.get('/appointment/:docid', getAppointmentHandler);
+// doctorRoute.get('/appointment/patient/:id' , getOneAppointment);
 doctorRoute.post('/diagnosis/:visitid', writeDiagnosisHandler);
 // doctorRoute.post('/procedures/visit/:id', addProceduresHandler);
 
 
-
 async function getAppointmentHandler(req, res){
+  console.log(Appointment);
   const doctorId = req.params.docid;
   const listOfAppointments = await Appointment.find({doctor:doctorId, status:'new'});
   const output = listOfAppointments.map(async appointment=>{
-    const patient = await Patient.findById(appointment.patient)
+    const patient = await Patient.findById(appointment.patient);
     let obj = {
-        time:appointment.time,
-        date:appointment.date,
-        patient:patient
-    }
+      time:appointment.time,
+      date:appointment.date,
+      patient:patient,
+    };
     return obj;
   });
   res.status(200).json(output);
