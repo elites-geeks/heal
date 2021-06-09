@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const morgan = require('morgan');
-const basic = require('../middlewares/auth/basic').basicAuthentication;
+const basic = require('../middlewares/auth/basic');
 const bearer = require('../middlewares/auth/bearer');
 const notFoundHandler = require('../middlewares/err/404');
 

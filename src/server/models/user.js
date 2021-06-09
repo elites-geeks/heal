@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const {
     trim,
 } = require('jquery');
+const { propfind } = require('../routes/doctor');
 
 const entitySchema = mongoose.Schema({
     username: {
@@ -221,6 +222,7 @@ const subscribtionRequestSchema = mongoose.Schema({
         type: String,
         required: true,
         enum: ['pinding', 'approved', 'rejected'],
+        default:'pinding'
     },
 });
 const doctorSchema = mongoose.Schema({
@@ -340,7 +342,7 @@ const labTestsSchema = mongoose.Schema({
         type: String,
     },
     timeDeleted :{
-        type: string
+        type: String
     },
     visitNum: {
         type: String,
@@ -536,43 +538,7 @@ const appointmentSchema = mongoose.Schema({
         enum: ['new', 'active', 'history', 'deleted', 'missed']
     }
 });
-const visitSchema = mongoose.Schema({
-    appoitmentNum: {
-        type: String
-    },
-    patient: {
-        type: String,
-        required: true
-    },
-    doctor: {
-        type: String
-    },
-    diagnosis: {
-        type: String
-    },
-    lab: {
-        type: [String]
-    },
-    radio: {
-        type: [String]
-    },
-    drug: {
-        type: [String]
-    },
-    therapy: {
-        type: [String]
-    },
-    timeOpened: {
-        type: String,
-        required: true
-    },
-    timeEnded: {
-        type: String
-    },
-    accountant: {
-        type: String
-    }
-});
+
 
 const visitApprove = mongoose.Schema({
     visitNumber: {
@@ -586,6 +552,7 @@ const visitApprove = mongoose.Schema({
     status: {
         type: String,
         enum: ['approved', 'notapproved', 'pinding'],
+        default:'pinding'
     },
 });
 
@@ -593,7 +560,7 @@ entitySchema.virtual('token').get(function () {
     let tokenObject = {
         username: this.username,
         role:this.role,
-        id=this._id
+        id:this._id
     };
     return jwt.sign(tokenObject, process.env.SECRET);
 });

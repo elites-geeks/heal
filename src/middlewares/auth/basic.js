@@ -42,4 +42,4 @@ async function basicAuthentication (req, res, next)  {
   
 }
 
-module.exports = {basic:basicAuthentication};
+module.exports = basicAuthentication;

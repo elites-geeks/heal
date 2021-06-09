@@ -98,7 +98,7 @@ describe('Testing \'doctor\' routes: ', ()=> {
         await appointment1.save();
         await appointment2.save();
 
-        const res = await mockServer.get('/doctor/appointment/60bf9525a35d18223ac97249');
+        const res = await mockServer.get('/doctor/appointments/60bf9525a35d18223ac97249');
         expect(res.status).toEqual(200);
     });
     it('Can write diagnosis', async ()=>{
