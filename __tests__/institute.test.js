@@ -32,7 +32,7 @@ describe('instiute routing test', () => {
       gender: 'female',
       img: 'hi',
       country: 'irbid',
-      type:'patient',
+      type:'employee',
     };
     let employeeSchema1=new db.User(employeeObj1);
     const employeeSchema1Saved=await employeeSchema1.save();
@@ -103,10 +103,28 @@ describe('instiute routing test', () => {
     expect(res.status).toEqual(204);
   });
   it('add New Employee)', async ()=> {
-   
-    let res=await mockRequest.put(`/instiute/department/employee/${empid}/${departmentId}`);
+ 
+
+    const employeeObj = {
+      username: 'ali41',
+      password: '1234',
+      phone_number: 1234,
+      email:'omar@gmail.com',
+      role: 'user',
+      date_of_birth: '12/5/2021',
+      firstname: 'areen',
+      lastname: 'jaradat',
+      gender: 'female',
+      img: 'hi',
+      country: 'irbid',
+      type:'employee',
+      field: 'pharmacy',
+      yearsOfExp: 5,
+      institute: 'institute',
+    };
+    let res=await mockRequest.post(`/instiute/department/employee`).send(employeeObj);
     
-    expect(res.status).toEqual(204);
+    expect(res.status).toEqual(200);
   });
 });
 
