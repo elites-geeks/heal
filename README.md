@@ -21,9 +21,6 @@
 
 [Requirements Page](requirements.md)
 
-## Domain Modeling
-![system modeling](assets/system-modeling.png)
-
 ## UML
 
 ![UML](assets/HEAL.png)
