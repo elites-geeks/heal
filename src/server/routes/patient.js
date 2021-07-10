@@ -54,8 +54,8 @@ async function pendingProceduresHandler(req,res){
     let  radioProcedure=await db.RadioTest.find({status:'nonpaid',paitent:id});
     let  therapyProcedure=await db.Therapy.find({status:'nonpaid',paitent:id});
     let  drugProcedure=await db.Drug.find({status:'nonpaid',paitent:id});
-    
-    
+
+
     res.status(200).json({labProcedure,radioProcedure,therapyProcedure,drugProcedure});
   }catch(error){
     console.log(error);
@@ -89,10 +89,10 @@ async function appointmentGetHandler(req,res){
   try{
     let id =req.params.patientid;
     let obj=await db.Appointment.find({paitent:id});
-    let newObj=obj.map(async(appointment)=>{
+    let newObj=await Promise.all( obj.map(async(appointment)=>{
       let doctor=await db.Doctor.findById(appointment.doctor);
       return {doctor:doctor,time:appointment.time,status:appointment.status,date:appointment.date};
-    });
+    }));
     res.status(200).json(newObj);
 
   }catch(error){
@@ -120,8 +120,8 @@ async function subscribeHandler(req,res){
     console.log(error);
   }
 }
-  
-  
+
+
 
 
 

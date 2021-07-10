@@ -51,7 +51,7 @@ async function getAllRequestsHandler(req, res) {
         patient,
         policy,
       };
-    })); 
+    }));
 
     //console.log('newList',newList);
 
@@ -95,22 +95,22 @@ async function getOneVistHandler(req, res) {
   try {
     let id = req.params.id;
     const getOneVisit = await db.Visit.findById(id);
-    const labtests = getOneVisit.lab.map(async(id) => {
+    const labtests =await Promise.all( getOneVisit.lab.map(async(id) => {
       const labTest = await db.LabTest.findById(id);
       return labTest;
-    });
-    const radioTests = getOneVisit.radio.map(async(id) => {
+    }));
+    const radioTests = await Promise.all(getOneVisit.radio.map(async(id) => {
       const radioTest = await db.RadioTest.findById(id);
       return radioTest;
-    });
-    const drugs = getOneVisit.drug.map(async(id) => {
+    }));
+    const drugs = await Promise.all(getOneVisit.drug.map(async(id) => {
       const drug = await db.Drug.findById(id);
       return drug;
-    });
-    const therabies = getOneVisit.therapy.map(async(id) => {
+    }));
+    const therabies = await Promise.all(getOneVisit.therapy.map(async(id) => {
       const therapy1 = await db.Therapy.findById(id);
       return therapy1;
-    });
+    }));
     const diagnosis = await db.Diagnosis.findById(getOneVisit.diagnosis);
     const output = {
       labtests,
@@ -228,11 +228,11 @@ async function getAllSubscribreshandlers(req, res) {
   } = req.params;
   try {
     const insComp = await db.InsuranceComp.findById(insCompId);
-    const subs = insComp.listOfSubscribers.map(async(subID) => {
+    const subs = await Promise.all(insComp.listOfSubscribers.map(async(subID) => {
       const sub = await db.Patient.findById(subID);
       return sub;
-    });
-   
+    }));
+
     res.status(200).json(subs);
   } catch (err) {
     console.log(err);
@@ -243,7 +243,7 @@ async function getOneSubscriberHandler(req, res) {
   try {
     let id = req.params.id;
     const getOneSubscribres = await db.Patient.findById(id);
-        
+
     res.status(200).json(getOneSubscribres);
   } catch (err) {
     console.log(err);
