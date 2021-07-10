@@ -247,4 +247,5 @@ async function addInsurance(req, res, next) {
   }
 }
 
+
 module.exports={addEmployee,addDoctor,addPatient,checkUsername,getAllProcedures,addHospital,addInsurance};
