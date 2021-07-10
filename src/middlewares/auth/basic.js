@@ -7,8 +7,8 @@ const {Entity} = require('../../server/models/user');
 
 async function basicAuthentication (req, res, next)  {
     console.log("start")
+    console.log(req.headers.authorization)
   let basicHeaderParts = req.headers.authorization.split(' ');
-  console.log(req.headers.authorization)
   let encodedString = basicHeaderParts.pop();
   let decodedString = base64.decode(encodedString);
   let [username, password] = decodedString.split(':');
