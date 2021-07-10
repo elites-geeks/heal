@@ -24,7 +24,7 @@ async function addEmployee(req, res, next) {
     if (input.role == 'user') {
       if (input.type == 'employee') {
         console.log(input.type);
-        const ent = new Entity({...input,role:input.filed});
+        const ent = new Entity({...input,role:input.field});
         await ent.save();
         const user = new User({
           info: ent,
