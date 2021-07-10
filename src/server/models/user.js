@@ -27,7 +27,7 @@ const entitySchema = mongoose.Schema({
   role: {
     type: String,
     required: true,
-    enum: ['user', 'institute', 'admin', 'radio', 'lab', 'account', 'pharmacy', 'insurance', 'therapy','hospital', 'insurance','patient', 'doctor', 'employee' ],
+    enum: ['user', 'institute', 'admin', 'radio', 'lab', 'account', 'pharmacy', 'insurance', 'therapy','hospital', 'insurance','client', 'doctor', 'employee' ],
   },
   parentId:{
     type: String
@@ -271,6 +271,7 @@ const patientSchema = mongoose.Schema({
   insuranceStatus: {
     type: Boolean,
     required: true,
+    default:false
   },
   insurancePolicy: {
     type: String,
