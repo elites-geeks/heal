@@ -18,46 +18,43 @@ const {
 async function addEmployee(req, res, next) {
 
     const input = req.body;
-    try {
-        if (input.role == 'user') {
-            if (input.type == 'employee') {
-                const ent = new Entity({ ...input, role: input.field });
-                await ent.save();
-                const user = new User({
-                    info: ent,
-                    ...input,
-                });
-                await user.save();
-                const emp = new Employee({
-                    info: user,
-                    ...input,
-                });
-                const empSaved = await emp.save();
-                // const addToDep = await Department.findOneAndUpdate({
-                //   institute: input.institute,
-                //   field: input.field,
-                // }, {
-                //   $push: {
-                //     listOFEmployees: emp,
-                //   },
-                // });
-                // if (!addToDep) {
-                //   console.log('No department to add the employee');
-                //   next('No department to add the employee');
-                // }
-                req.newEmployee = empSaved;
-                next();
-            } else {
-                console.log('Not An Employee');
-                next('Not An Employee');
-            }
-        } else {
-            console.log('Not A User');
-            next('Not A User');
-        }
-    } catch (error) {
-        console.log(error);
-        console.log(error.message);
+        console.log(input)
+    if (input.role == 'user') {
+      if (input.type == 'employee') {
+        console.log(input.type);
+        const ent = new Entity({...input,role:input.field});
+        await ent.save();
+        const user = new User({
+          info: ent,
+          ...input,
+        });
+        await user.save();
+        const emp = new Employee({
+          info: user,
+          ...input,
+        });
+        const empSaved = await emp.save();
+        // const addToDep = await Department.findOneAndUpdate({
+        //   institute: input.institute,
+        //   field: input.field,
+        // }, {
+        //   $push: {
+        //     listOFEmployees: emp,
+        //   },
+        // });
+        // if (!addToDep) {
+        //   console.log('No department to add the employee');
+        //   next('No department to add the employee');
+        // }
+        req.newEmployee = empSaved;
+        next();
+      } else {
+        console.log('Not An Employee');
+        next('Not An Employee');
+      }
+    } else {
+      console.log('Not A User');
+      next('Not A User');
     }
 }
 
