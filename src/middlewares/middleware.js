@@ -19,11 +19,11 @@ async function addEmployee(req, res, next) {
   try {
     console.log('add employee');
     const input = req.body;
-  
+
     if (input.role == 'user') {
       if (input.type == 'employee') {
         console.log(input.type);
-        const ent = new Entity(input);
+        const ent = new Entity({...input,role:input.filed});
         await ent.save();
         const user = new User({
           info: ent,
@@ -69,7 +69,7 @@ async function addDoctor(req, res, next) {
     const input = req.body;
     if (input.role == 'user') {
       if (input.type == 'doctor') {
-        const ent = new Entity(input);
+        const ent = new Entity({...input,role:"doctor"});
         //console.log('ent',ent);
         await ent.save();
         const user = new User({
@@ -107,9 +107,9 @@ async function addPatient(req, res, next) {
     const input = req.body;
     if (input.role == 'user') {
       if (input.type == 'patient') {
-        const ent = new Entity(input);
+        const ent = new Entity({...input,role:"client"});
         await ent.save();
-        
+
         const user = new User({
           info: ent,
           ...input,
@@ -122,7 +122,7 @@ async function addPatient(req, res, next) {
         });
         const patSaved = await pat.save();
         req.newPatient = patSaved;
-        
+
         next();
       } else {
         next('Not a patient');
@@ -154,7 +154,7 @@ async function checkUsername(req, res, next) {
   } catch (error) {
     console.log(error.message);
   }
-  
+
 
 }
 
@@ -197,7 +197,7 @@ async function addHospital(req, res, next) {
   try {
     if (input.role == 'institute') {
       if (input.type == 'hospital') {
-        const ent = new Entity(input);
+        const ent = new Entity({...input,role:"hospital"});
         await ent.save();
         const institute = new Institute({
           info: ent,
@@ -222,7 +222,7 @@ async function addInsurance(req, res, next) {
   try {
     if (input.role == 'institute') {
       if (input.type == 'insurance') {
-        const ent = new Entity(input);
+        const ent = new Entity({...input,role:"insurance"});
         await ent.save();
         const institute = new Institute({
           info: ent,
