@@ -16,10 +16,11 @@ const {
   InsuranceComp,
 } = require('../server/models/user');
 async function addEmployee(req, res, next) {
-  try {
     console.log('add employee');
+    try {
+      console.log('add employee2');
     const input = req.body;
-
+        console.log(input)
     if (input.role == 'user') {
       if (input.type == 'employee') {
         console.log(input.type);
