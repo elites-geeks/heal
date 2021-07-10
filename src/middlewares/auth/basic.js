@@ -6,8 +6,9 @@ const {Entity} = require('../../server/models/user');
 // const clientRoute = require('../../server/routes/client');
 
 async function basicAuthentication (req, res, next)  {
-
+    console.log("start")
   let basicHeaderParts = req.headers.authorization.split(' ');
+  console.log(req.headers.authorization)
   let encodedString = basicHeaderParts.pop();
   let decodedString = base64.decode(encodedString);
   let [username, password] = decodedString.split(':');
