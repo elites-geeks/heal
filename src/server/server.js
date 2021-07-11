@@ -90,6 +90,11 @@ function run(PORT) {
 }
 
 // Connecting to the socket ------------------------------
+io.of('/newAppointNotification').on('connection', socket=>{
+    socket.on('new-appointment', payload=>{
+        socket.broadcast.emit('new-appointment',payload)
+    })
+});
 
 io.on('connection', (socket) => {
   console.log("User Logged in " , socket.id);
