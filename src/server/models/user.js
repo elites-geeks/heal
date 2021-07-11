@@ -587,9 +587,14 @@ entitySchema.pre('save', async function (next) {
   next();
 });
 
-patientSchema.pre('save', function(next){
-  this.userProfile.info.parentId = this._id;
-  next();
+patientSchema.pre('save',async function(next){
+    try {
+        await Entity.findByIdAndUpdate(this.userProfile.info._id,{parentId:this._id})
+      next();
+    } catch (error) {
+        console.log(error.message)
+        console.log("cant save entity parend IT")
+    }
 });
 
 entitySchema.statics.authenticateWithToken = async function (token) {
