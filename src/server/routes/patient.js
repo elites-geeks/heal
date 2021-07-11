@@ -79,10 +79,10 @@ async function appointmentSearchHandler(req, res) {
     const docs = await db.Doctor.find({ specialty:specialty, clinicLocation:location });
     const list = docs.filter(doc => {
         const dates = doc.appointmentList.map(appoint => {
-            return [appoint.date, appoint.time, appoint.status]
+            return {date:appoint.date, time:appoint.time, status:appoint.status}
         })
         console.log(dates)
-        if (dates.includes([moment(date).format('YYYY-MM-DD'), moment(date).format('HH:mm'), 'new'])) {
+        if (dates.includes({date:moment(date).format('YYYY-MM-DD'), time:moment(date).format('HH:mm'), status:'new'})) {
             return false;
         } else {
             return true;
