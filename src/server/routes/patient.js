@@ -21,7 +21,6 @@ async function reserveAppointmentHandler(req, res) {
     const { docid } = req.params;
     const { patientId, time, date } = req.body;
     try{
-
         const newAppoint = new db.Appointment({
             time,
             date
@@ -75,7 +74,7 @@ async function selfVisitHandler(req, res) {
 
 async function appointmentSearchHandler(req, res) {
     const { specialty, location, date } = req.body;
-    const docs = await db.Doctor.find({ specialty, location });
+    const docs = await db.Doctor.find({ specialty:specialty, clinicLocation:location });
     const list = docs.filter(doc => {
         const dates = doc.appointmentList.map(appoint => {
             return [appoint.date, appoint.time, appoint.status]
