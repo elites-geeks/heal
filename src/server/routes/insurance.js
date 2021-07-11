@@ -148,7 +148,7 @@ async function addPoliciesHandler(req, res) {
       offerName,
       costPerYear,
       costPerMonth,
-      patientsSubscribed,
+      company
     } = req.body;
     //console.log(req.body);
     const newPolicy = new db.Policy({
@@ -158,7 +158,7 @@ async function addPoliciesHandler(req, res) {
       costPerMonth: costPerMonth,
     });
     const savenewPolicy = await newPolicy.save();
-
+    await db.InsuranceComp.findOneAndUpdate({profile:{name:company}}, {$push :{listOfPolicies:newPolicy}})
     res.status(201).send(savenewPolicy);
   } catch (err) {
     console.log(err);

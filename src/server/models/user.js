@@ -27,7 +27,7 @@ const entitySchema = mongoose.Schema({
   role: {
     type: String,
     required: true,
-    enum: ['user', 'institute', 'admin', 'radio', 'lab', 'account', 'pharmacy', 'insurance', 'therapy','hospital', 'insurance','client', 'doctor', 'employee' ],
+    enum: ['user', 'institute', 'admin', 'radio', 'lab', 'account', 'pharmacy', 'insurance', 'therapy','hospital','client', 'doctor', 'employee' ],
   },
   parentId:{
     type: String
