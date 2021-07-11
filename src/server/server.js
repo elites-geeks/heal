@@ -5,7 +5,11 @@
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server,{
+    cors:{
+        origin:"*"
+    }
+});
 
 // Requiring error handlers ----------------------
 
@@ -89,7 +93,7 @@ function run(PORT) {
 
 io.on('connection', (socket) => {
   console.log("User Logged in " , socket.id);
-  
+
   socket.on('test' , pay=>{
     console.log(pay);
     io.emit('test' , 'Welcooooome')
