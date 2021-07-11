@@ -6,8 +6,8 @@ const {addDoctor , addHospital ,addInsurance, checkUsername , addPatient, addEmp
 adminRoute.post('/doctor',checkUsername,addDoctor , addNewDoctor);
 adminRoute.post('/hospital', checkUsername,addHospital,addNewHospital);
 adminRoute.post('/insurance' , checkUsername , addInsurance , addNewInsurance);
-adminRoute.post('/patient', addPatient , addNewPateint);
-adminRoute.post('/employee', addEmployee , addNewEmployee);
+adminRoute.post('/patient',checkUsername, addPatient , addNewPateint);
+adminRoute.post('/employee',checkUsername, addEmployee , addNewEmployee);
 
 async function addNewInsurance(req , res){
     const {newInsComp} = req;
