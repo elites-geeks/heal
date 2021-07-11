@@ -20,6 +20,8 @@ patientRoute.get('/insurance', getInsuranceCompanies);
 async function reserveAppointmentHandler(req, res) {
     const { docid } = req.params;
     const { patientId, time, date } = req.body;
+    time = moment(time).format('HH:mm')
+    date = moment(date).format('YYYY-MM-DD')
     try{
         const newAppoint = new db.Appointment({
             time,
@@ -79,7 +81,7 @@ async function appointmentSearchHandler(req, res) {
         const dates = doc.appointmentList.map(appoint => {
             return [appoint.date, appoint.time, appoint.status]
         })
-        console.log(moment(date).format('YYYY-MM-DD'), moment(date).format('HH:mm'))
+        console.log(dates)
         if (dates.includes([moment(date).format('YYYY-MM-DD'), moment(date).format('HH:mm'), 'new'])) {
             return false;
         } else {
