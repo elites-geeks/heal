@@ -249,7 +249,7 @@ const doctorSchema = mongoose.Schema({
     required: true,
   },
   appointmentList: {
-    type: [String],
+    type: [appointmentSchema],
   },
 });
 
@@ -277,7 +277,7 @@ const patientSchema = mongoose.Schema({
     type: String,
   },
   appointmentList: {
-    type: [String],
+    type: [appointmentSchema],
   },
   patientHistory:{type:patientHistorySchema},
 });
@@ -519,14 +519,6 @@ const diagnosisSchema = mongoose.Schema({
 });
 
 const appointmentSchema = mongoose.Schema({
-  doctor: {
-    type: String,
-    required: true,
-  },
-  patient: {
-    type: String,
-    required: true,
-  },
   time: {
     type: String,
     required: true,
@@ -565,6 +557,7 @@ entitySchema.virtual('token').get(function () {
     username: this.username,
     role:this.role,
     id:this._id,
+    parentId:this.parentId
   };
   return jwt.sign(tokenObject, process.env.SECRET);
 });
