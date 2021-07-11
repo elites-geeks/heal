@@ -19,7 +19,7 @@ patientRoute.get('/insurance', getInsuranceCompanies);
 
 async function reserveAppointmentHandler(req, res) {
     const { docid } = req.params;
-    const { patientId, time, date } = req.body;
+    let { patientId, time, date } = req.body;
     time = moment(time).format('HH:mm')
     date = moment(date).format('YYYY-MM-DD')
     try{
