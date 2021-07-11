@@ -34,18 +34,23 @@ async function addEmployee(req, res, next) {
           ...input,
         });
         const empSaved = await emp.save();
-        // const addToDep = await Department.findOneAndUpdate({
-        //   institute: input.institute,
-        //   field: input.field,
-        // }, {
-        //   $push: {
-        //     listOFEmployees: emp,
-        //   },
-        // });
-        // if (!addToDep) {
-        //   console.log('No department to add the employee');
-        //   next('No department to add the employee');
-        // }
+        const institute = await Institute.findOne({name:input.institute});
+        if(institute._id){
+            const addToDep = await Department.findOneAndUpdate({
+              institute: institute._id,
+              field: input.field,
+            }, {
+              $push: {
+                listOFEmployees: emp,
+              },
+            });
+            if (!addToDep) {
+              console.log('No department to add the employee');
+              next('No department to add the employee');
+            }
+        }else{
+            next("Not an institute")
+        }
         req.newEmployee = empSaved;
         next();
       } else {

@@ -41,7 +41,7 @@ async function getOneDepartment(req,res){
     const dep =await Department.findById(depid);
     res.status(200).json(JSON.stringify(dep));
   } catch (error) {
-    console.log(error.message);  
+    console.log(error.message);
   }
 }
 async function getAllDepartments(req,res){
@@ -67,7 +67,7 @@ async function addDepartment(req,res){
       const department = new Department(req.body);
       const savedDep = await department.save();
       await Institute.findByIdAndUpdate(instituteid,{$push :{listOfDeps:department}});
-      res.status(201).json(JSON.stringify(savedDep));
+      res.status(201).json(savedDep);
     }
   } catch (error) {
     console.log(error.message);
