@@ -227,6 +227,22 @@ const subscribtionRequestSchema = mongoose.Schema({
         default:'pinding'
     },
 });
+const appointmentSchema = mongoose.Schema({
+    time: {
+      type: String,
+      required: true,
+    },
+    date: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: ['new', 'active', 'history', 'deleted', 'missed'],
+      default:'new'
+    },
+  });
 const doctorSchema = mongoose.Schema({
   userProfile: {
     type: userSchema,
@@ -518,22 +534,7 @@ const diagnosisSchema = mongoose.Schema({
   },
 });
 
-const appointmentSchema = mongoose.Schema({
-  time: {
-    type: String,
-    required: true,
-  },
-  date: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    required: true,
-    enum: ['new', 'active', 'history', 'deleted', 'missed'],
-    default:'new'
-  },
-});
+
 
 
 const visitApprove = mongoose.Schema({
