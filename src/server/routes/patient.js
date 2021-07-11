@@ -79,6 +79,7 @@ async function appointmentSearchHandler(req, res) {
         const dates = doc.appointmentList.map(appoint => {
             return [appoint.date, appoint.time, appoint.status]
         })
+        console.log(moment(date).format('YYYY-MM-DD'), moment(date).format('HH:mm'))
         if (dates.includes([moment(date).format('YYYY-MM-DD'), moment(date).format('HH:mm'), 'new'])) {
             return false;
         } else {
