@@ -151,7 +151,6 @@ async function subscribeHandler(req, res) {
             insuranceComp: insuranceComp,
             policy: policy,
             status: 'pinding',
-
         });
         let saveSubsicribe = await newSubscribtionRequest.save();
         let patient = await db.Patient.findById(patientId);
@@ -162,12 +161,5 @@ async function subscribeHandler(req, res) {
         console.log(error);
     }
 }
-
-
-
-
-
-
-
 
 module.exports = patientRoute;
