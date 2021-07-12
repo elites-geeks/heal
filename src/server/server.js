@@ -90,14 +90,14 @@ function run(PORT) {
 }
 
 // Connecting to the socket ------------------------------
-const jwt = require('jsonwebtoken')
-const peopleConnected = []
-io.of('/newAppointNotification').use((socket, next) => {
-    const token = socket.handshake.auth.token;
-    const user = jwt.verify(token,process.env.SECRET)
-    peopleConnected.push({user:user.id, socket:socket.id})
-    next()
-})
+// const jwt = require('jsonwebtoken')
+// const peopleConnected = []
+// io.of('/newAppointNotification').use((socket, next) => {
+//     const token = socket.handshake.auth.token;
+//     const user = jwt.verify(token,process.env.SECRET)
+//     peopleConnected.push({user:user.id, socket:socket.id})
+//     next()
+// })
 io.of('/newAppointNotification').on('connection', socket => {
     socket.on('new-appointment', payload => {
         socket.broadcast.emit('new-appointment', payload)
