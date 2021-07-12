@@ -82,6 +82,7 @@ async function appointmentSearchHandler(req, res) {
         console.log("dates",dates)
         console.log("date",date)
         const {datee, time, status} = {datee:moment(date).format('YYYY-MM-DD'), time:moment(date).format('HH:00'), status:'new'}
+        console.log("date extetracte",{datee, time, status})
         if (dates.findIndex(elem=> elem.date===datee && elem.time===time && elem.status===status)>-1) {
             return false;
         } else {
