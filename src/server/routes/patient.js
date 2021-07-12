@@ -20,8 +20,6 @@ patientRoute.get('/insurance', getInsuranceCompanies);
 async function reserveAppointmentHandler(req, res) {
     const { docid } = req.params;
     let { patientId, time, date } = req.body;
-    time = moment(time).format('HH:mm')
-    date = moment(date).format('YYYY-MM-DD')
     try{
         const newAppoint = new db.Appointment({
             time,
