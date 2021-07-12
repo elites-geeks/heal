@@ -599,7 +599,25 @@ patientSchema.pre('save', async function (next) {
         next();
     } catch (error) {
         console.log(error.message)
-        console.log("cant save entity parend IT")
+        console.log("cant save entity patent id")
+    }
+});
+doctorSchema.pre('save', async function (next) {
+    try {
+        await Entity.findByIdAndUpdate(this.userProfile.info._id, { parentId: this._id })
+        next();
+    } catch (error) {
+        console.log(error.message)
+        console.log("cant save entity patent id")
+    }
+});
+employeeSchema.pre('save', async function (next) {
+    try {
+        await Entity.findByIdAndUpdate(this.info.info._id, { parentId: this._id })
+        next();
+    } catch (error) {
+        console.log(error.message)
+        console.log("cant save entity patent id")
     }
 });
 
