@@ -230,7 +230,7 @@ async function addInsurance(req, res, next) {
                 });
                 await institute.save();
                 const insuranceCompany = new InsuranceComp({
-                    info: institute,
+                    profile: institute,
                     ...input,
                 });
                 const savedIns = await insuranceCompany.save();
