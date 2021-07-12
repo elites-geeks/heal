@@ -4,208 +4,208 @@ const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET || 'mysecret';
 const bcrypt = require('bcrypt');
 const {
-  trim,
+    trim,
 } = require('jquery');
 
 const entitySchema = mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  phone_number: {
-    type: Number,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    required: true,
-    enum: ['user', 'institute', 'admin', 'radio', 'lab', 'account', 'pharmacy', 'insurance', 'therapy','hospital','client', 'doctor', 'employee' ],
-  },
-  parentId:{
-    type: String
-  }
+    username: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    phone_number: {
+        type: Number,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    role: {
+        type: String,
+        required: true,
+        enum: ['user', 'institute', 'admin', 'radio', 'lab', 'account', 'pharmacy', 'insurance', 'therapy', 'hospital', 'client', 'doctor', 'employee'],
+    },
+    parentId: {
+        type: String
+    }
 });
 
 const userSchema = mongoose.Schema({
-  info: {
-    type: entitySchema,
-    required: true,
-  },
-  date_of_birth: {
-    type: String,
-    required: true,
-  },
-  firstname: {
-    type: String,
-    require: true,
-  },
-  lastname: {
-    type: String,
-    require: true,
-  },
-  gender: {
-    type: String,
-    enum: ['male', 'female'],
-    required: true,
-  },
-  img: {
-    type: String,
-    required: true,
-  },
-  country: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: true,
-    enum: ['patient', 'doctor', 'employee'],
-  },
+    info: {
+        type: entitySchema,
+        required: true,
+    },
+    date_of_birth: {
+        type: String,
+        required: true,
+    },
+    firstname: {
+        type: String,
+        require: true,
+    },
+    lastname: {
+        type: String,
+        require: true,
+    },
+    gender: {
+        type: String,
+        enum: ['male', 'female'],
+        required: true,
+    },
+    img: {
+        type: String,
+        required: true,
+    },
+    country: {
+        type: String,
+        required: true,
+    },
+    type: {
+        type: String,
+        required: true,
+        enum: ['patient', 'doctor', 'employee'],
+    },
 });
 
 const employeeSchema = mongoose.Schema({
-  field: {
-    type: String,
-    enum: ['admin', 'radio', 'lab', 'account', 'pharmacy', 'insurance', 'therapy'],
-    required: true,
-  },
-  yearsOfExp: {
-    type: Number,
-    required: true,
-  },
-  institute: {
-    type: String,
-    required: true,
-  },
-  info: {
-    type: userSchema,
-    required: true,
-  },
-  patientsServed: {
-    type: [String],
-  },
+    field: {
+        type: String,
+        enum: ['admin', 'radio', 'lab', 'account', 'pharmacy', 'insurance', 'therapy'],
+        required: true,
+    },
+    yearsOfExp: {
+        type: Number,
+        required: true,
+    },
+    institute: {
+        type: String,
+        required: true,
+    },
+    info: {
+        type: userSchema,
+        required: true,
+    },
+    patientsServed: {
+        type: [String],
+    },
 });
 
 const departmentSchema = mongoose.Schema({
-  field: {
-    type: String,
-    enum: ['admin', 'radio', 'lab', 'account', 'pharmacy', 'insurance', 'therapy'],
-    required: true,
-  },
-  listOFEmployees: [employeeSchema],
-  institute: {
-    type: String,
-    required: true,
-  },
+    field: {
+        type: String,
+        enum: ['admin', 'radio', 'lab', 'account', 'pharmacy', 'insurance', 'therapy'],
+        required: true,
+    },
+    listOFEmployees: [employeeSchema],
+    institute: {
+        type: String,
+        required: true,
+    },
 });
 
 const instiuteSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  info: {
-    type: entitySchema,
-    required: true,
-  },
-  location: {
-    type: String,
-    required: true,
-  },
-  listOfDeps: {
-    type: [departmentSchema],
-  },
-  type: {
-    type: String,
-    required: true,
-    enum: ['hospital', 'insurance'],
-  },
+    name: {
+        type: String,
+        required: true,
+    },
+    info: {
+        type: entitySchema,
+        required: true,
+    },
+    location: {
+        type: String,
+        required: true,
+    },
+    listOfDeps: {
+        type: [departmentSchema],
+    },
+    type: {
+        type: String,
+        required: true,
+        enum: ['hospital', 'insurance'],
+    },
 });
 
 const policySchema = mongoose.Schema({
-  offerCoverage: {
-    type: Number,
-    required: true,
-  },
-  offerName: {
-    type: String,
-    required: true,
-  },
-  costPerYear: {
-    type: Number,
-    required: true,
-  },
-  costPerMonth: {
-    type: Number,
-    required: true,
-  },
-  patientsSubscribed: {
-    type: [String],
-  },
+    offerCoverage: {
+        type: Number,
+        required: true,
+    },
+    offerName: {
+        type: String,
+        required: true,
+    },
+    costPerYear: {
+        type: Number,
+        required: true,
+    },
+    costPerMonth: {
+        type: Number,
+        required: true,
+    },
+    patientsSubscribed: {
+        type: [String],
+    },
 });
 
 const visitSchema = mongoose.Schema({
-  appoitmentNum: {
-    type: String,
-  },
-  patient: {
-    type: String,
-    required: true,
-  },
-  doctor: {
-    type: String,
-  },
-  diagnosis: {
-    type: String,
-  },
-  lab: {
-    type: [String],
-  },
-  radio: {
-    type: [String],
-  },
-  drug: {
-    type: [String],
-  },
-  therapy: {
-    type: [String],
-  },
-  timeOpened: {
-    type: String,
-    required: true,
-  },
-  timeEnded: {
-    type: String,
-  },
-  accountant:{
-    type:String,
-  },
+    appoitmentNum: {
+        type: String,
+    },
+    patient: {
+        type: String,
+        required: true,
+    },
+    doctor: {
+        type: String,
+    },
+    diagnosis: {
+        type: String,
+    },
+    lab: {
+        type: [String],
+    },
+    radio: {
+        type: [String],
+    },
+    drug: {
+        type: [String],
+    },
+    therapy: {
+        type: [String],
+    },
+    timeOpened: {
+        type: String,
+        required: true,
+    },
+    timeEnded: {
+        type: String,
+    },
+    accountant: {
+        type: String,
+    },
 });
 const insuranceCompSchema = mongoose.Schema({
-  profile: {
-    type: instiuteSchema,
-    required: true,
-  },
-  listOfPolicies: {
-    type: [policySchema],
-  },
-  listOfSubscribers: {
-    type: [String],
-  },
-  listOfAccreditedInstitution: {
-    type: [String],
-  },
-  listOfAccreditedDoctors: {
-    type: [String],
-  },
+    profile: {
+        type: instiuteSchema,
+        required: true,
+    },
+    listOfPolicies: {
+        type: [policySchema],
+    },
+    listOfSubscribers: {
+        type: [String],
+    },
+    listOfAccreditedInstitution: {
+        type: [String],
+    },
+    listOfAccreditedDoctors: {
+        type: [String],
+    },
 });
 const subscribtionRequestSchema = mongoose.Schema({
     patientId: {
@@ -224,105 +224,111 @@ const subscribtionRequestSchema = mongoose.Schema({
         type: String,
         required: true,
         enum: ['pinding', 'approved', 'rejected'],
-        default:'pinding'
+        default: 'pinding'
     },
 });
 const appointmentSchema = mongoose.Schema({
     time: {
-      type: String,
-      required: true,
+        type: String,
+        required: true,
     },
     date: {
-      type: String,
-      required: true,
+        type: String,
+        required: true,
     },
     status: {
-      type: String,
-      required: true,
-      enum: ['new', 'active', 'history', 'deleted', 'missed'],
-      default:'new'
+        type: String,
+        required: true,
+        enum: ['new', 'active', 'history', 'deleted', 'missed'],
+        default: 'new'
     },
-  });
+    doctor: {
+        type: String
+    },
+    patient: {
+        type: String
+    }
+});
 const doctorSchema = mongoose.Schema({
-  userProfile: {
-    type: userSchema,
-    required: true,
-  },
-  specialty: {
-    type: String,
-    required: true,
-  },
-  clinicLocation: {
-    type: String,
-    required: true,
-  },
-  clinicPhoneNumber: {
-    type: Number,
-    required: true,
-  },
-  yearsOfExp: {
-    type: Number,
-    required: true,
-  },
-  appointmentList: {
-    type: [appointmentSchema],
-  },
+    userProfile: {
+        type: userSchema,
+        required: true,
+    },
+    specialty: {
+        type: String,
+        required: true,
+    },
+    clinicLocation: {
+        type: String,
+        required: true,
+    },
+    clinicPhoneNumber: {
+        type: Number,
+        required: true,
+    },
+    yearsOfExp: {
+        type: Number,
+        required: true,
+    },
+    appointmentList: {
+        type: [appointmentSchema],
+    },
 });
 
 const patientHistorySchema = mongoose.Schema({
-  medicalState: {
-    type: [String],
-    required: true,
-  },
-  visits: {
-    type: [visitSchema],
-  },
+    medicalState: {
+        type: [String],
+        required: true,
+    },
+    visits: {
+        type: [visitSchema],
+    },
 });
 
 const patientSchema = mongoose.Schema({
-  userProfile: {
-    type: userSchema,
-    required: true,
-  },
-  insuranceStatus: {
-    type: Boolean,
-    required: true,
-    default:false
-  },
-  insurancePolicy: {
-    type: String,
-  },
-  appointmentList: {
-    type: [appointmentSchema],
-  },
-  patientHistory:{type:patientHistorySchema},
+    userProfile: {
+        type: userSchema,
+        required: true,
+    },
+    insuranceStatus: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    insurancePolicy: {
+        type: String,
+    },
+    appointmentList: {
+        type: [appointmentSchema],
+    },
+    patientHistory: { type: patientHistorySchema },
 });
 
 const procedureSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  code: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: true,
-    enum: ['lab', 'radio', 'therapy', 'drug'],
-  },
-  notes: {
-    type: [String],
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  expectedTime: {
-    type: String,
-    required: true,
-  },
+    name: {
+        type: String,
+        required: true,
+    },
+    code: {
+        type: String,
+        required: true,
+    },
+    type: {
+        type: String,
+        required: true,
+        enum: ['lab', 'radio', 'therapy', 'drug'],
+    },
+    notes: {
+        type: [String],
+    },
+    price: {
+        type: Number,
+        required: true,
+    },
+    expectedTime: {
+        type: String,
+        required: true,
+    },
 
 });
 
@@ -357,7 +363,7 @@ const labTestsSchema = mongoose.Schema({
     result: {
         type: String,
     },
-    timeDeleted :{
+    timeDeleted: {
         type: String
     },
     visitNum: {
@@ -377,7 +383,7 @@ const drugSchema = mongoose.Schema({
         type: String,
         enum: ['paid', 'active', 'nonpaid', 'done', 'deleted'],
         required: true,
-        default:'nonpaid'
+        default: 'nonpaid'
     },
     timeStart: {
         type: String,
@@ -415,123 +421,123 @@ const drugSchema = mongoose.Schema({
 });
 
 const radioTestSchema = mongoose.Schema({
-  procedure: {
-    type: String,
-  },
-  status: {
-    type: String,
-    enum: ['paid', 'active', 'nonpaid', 'done', 'deleted'],
-    required: true,
-    default:'nonpaid'
-  },
-  timeStart: {
-    type: String,
-  },
-  timeEnd: {
-    type: String,
-  },
-  patient: {
-    type: String,
-    required: true,
-  },
-  additionalNotes: {
-    type: [String],
-  },
-  timeAdded: {
-    type: String,
-    required: true,
-  },
-  doctorRequested: {
-    type: String,
-    required: true,
-  },
-  result: {
-    type: String,
-  },
-  position: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: true,
-    enum: ['ct', 'xray', 'ultrasound', 'mri', 'nervous'],
-  },
-  visitNum: {
-    type: String,
-    required: true,
-  },
+    procedure: {
+        type: String,
+    },
+    status: {
+        type: String,
+        enum: ['paid', 'active', 'nonpaid', 'done', 'deleted'],
+        required: true,
+        default: 'nonpaid'
+    },
+    timeStart: {
+        type: String,
+    },
+    timeEnd: {
+        type: String,
+    },
+    patient: {
+        type: String,
+        required: true,
+    },
+    additionalNotes: {
+        type: [String],
+    },
+    timeAdded: {
+        type: String,
+        required: true,
+    },
+    doctorRequested: {
+        type: String,
+        required: true,
+    },
+    result: {
+        type: String,
+    },
+    position: {
+        type: String,
+        required: true,
+    },
+    type: {
+        type: String,
+        required: true,
+        enum: ['ct', 'xray', 'ultrasound', 'mri', 'nervous'],
+    },
+    visitNum: {
+        type: String,
+        required: true,
+    },
 });
 
 const therapySchema = mongoose.Schema({
-  procedure: {
-    type: String,
-  },
-  visitNum: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: ['paid', 'active', 'nonpaid', 'done', 'deleted'],
-    required: true,
-    default:'nonpaid'
-  },
-  timeAdded: {
-    type: String,
-    required: true,
-  },
-  timeStart: {
-    type: String,
-  },
-  timeEnd: {
-    type: String,
-  },
-  patient: {
-    type: String,
-    required: true,
-  },
-  additionalNotes: {
-    type: [String],
-  },
-  result: {
-    type: String,
-  },
-  doctorRequested: {
-    type: String,
-    required: true,
-  },
+    procedure: {
+        type: String,
+    },
+    visitNum: {
+        type: String,
+        required: true,
+    },
+    status: {
+        type: String,
+        enum: ['paid', 'active', 'nonpaid', 'done', 'deleted'],
+        required: true,
+        default: 'nonpaid'
+    },
+    timeAdded: {
+        type: String,
+        required: true,
+    },
+    timeStart: {
+        type: String,
+    },
+    timeEnd: {
+        type: String,
+    },
+    patient: {
+        type: String,
+        required: true,
+    },
+    additionalNotes: {
+        type: [String],
+    },
+    result: {
+        type: String,
+    },
+    doctorRequested: {
+        type: String,
+        required: true,
+    },
 });
 
 const diagnosisSchema = mongoose.Schema({
-  patient: {
-    type: String,
-    required: true,
-  },
-  doctor: {
-    type: String,
-    required: true,
-  },
-  visitNum: {
-    type: String,
-    required: true,
-  },
-  timeWritten: {
-    type: String,
-    required: true,
-  },
-  signs: {
-    type: [String],
-    required: true,
-  },
-  sypmtoms: {
-    type: [String],
-    required: true,
-  },
-  finalDiagnosis: {
-    type: String,
-    required: true,
-  },
+    patient: {
+        type: String,
+        required: true,
+    },
+    doctor: {
+        type: String,
+        required: true,
+    },
+    visitNum: {
+        type: String,
+        required: true,
+    },
+    timeWritten: {
+        type: String,
+        required: true,
+    },
+    signs: {
+        type: [String],
+        required: true,
+    },
+    sypmtoms: {
+        type: [String],
+        required: true,
+    },
+    finalDiagnosis: {
+        type: String,
+        required: true,
+    },
 });
 
 
@@ -549,48 +555,48 @@ const visitApprove = mongoose.Schema({
     status: {
         type: String,
         enum: ['approved', 'notapproved', 'pinding'],
-        default:'pinding'
+        default: 'pinding'
     },
 });
 
 entitySchema.virtual('token').get(function () {
-  let tokenObject = {
-    username: this.username,
-    role:this.role,
-    id:this._id,
-    parentId:this.parentId
-  };
-  return jwt.sign(tokenObject, process.env.SECRET);
+    let tokenObject = {
+        username: this.username,
+        role: this.role,
+        id: this._id,
+        parentId: this.parentId
+    };
+    return jwt.sign(tokenObject, process.env.SECRET);
 });
 
 visitSchema.virtual('token').get(function () {
-  let tokenObject = {
-    tokenId: this._id,
-  };
-  return jwt.sign(tokenObject, process.env.SECRET);
+    let tokenObject = {
+        tokenId: this._id,
+    };
+    return jwt.sign(tokenObject, process.env.SECRET);
 });
 
 
 visitSchema.pre('save', async function () {
-  if (this.isModified('accountant')) {
-    const acco = Employee.findById(this.accountant);
-    this.token = jwt.sign({
-      tokenId: this._id,
-      accountant: acco.institute,
-    }, process.env.SECRET);
-  }
+    if (this.isModified('accountant')) {
+        const acco = Employee.findById(this.accountant);
+        this.token = jwt.sign({
+            tokenId: this._id,
+            accountant: acco.institute,
+        }, process.env.SECRET);
+    }
 });
 
 // Pre-Save Hook
 entitySchema.pre('save', async function (next) {
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
 });
 
-patientSchema.pre('save',async function(next){
+patientSchema.pre('save', async function (next) {
     try {
-        await Entity.findByIdAndUpdate(this.userProfile.info._id,{parentId:this._id})
-      next();
+        await Entity.findByIdAndUpdate(this.userProfile.info._id, { parentId: this._id })
+        next();
     } catch (error) {
         console.log(error.message)
         console.log("cant save entity parend IT")
@@ -598,30 +604,30 @@ patientSchema.pre('save',async function(next){
 });
 
 entitySchema.statics.authenticateWithToken = async function (token) {
-  try {
-    const parsedToken = jwt.verify(token, process.env.SECRET);
-    // console.log(parsedToken);
-    const user = await this.findOne({
-      username: parsedToken.username,
-    });
-    // console.log(user);
-    if (user) {
-      return user;
+    try {
+        const parsedToken = jwt.verify(token, process.env.SECRET);
+        // console.log(parsedToken);
+        const user = await this.findOne({
+            username: parsedToken.username,
+        });
+        // console.log(user);
+        if (user) {
+            return user;
+        }
+        throw new Error('User Not Found');
+    } catch (e) {
+        throw new Error(e.message);
     }
-    throw new Error('User Not Found');
-  } catch (e) {
-    throw new Error(e.message);
-  }
 };
 
 entitySchema.virtual('capabilities').get(function () {
-  let acl = {
-    user: ['read'],
-    writer: ['read', 'create'],
-    editor: ['read', 'create', 'update'],
-    admin: ['addHospital', 'add', 'update', 'delete'],
-  };
-  return acl[this.role];
+    let acl = {
+        user: ['read'],
+        writer: ['read', 'create'],
+        editor: ['read', 'create', 'update'],
+        admin: ['addHospital', 'add', 'update', 'delete'],
+    };
+    return acl[this.role];
 });
 
 // Create a mongoose schema
@@ -647,24 +653,24 @@ const Department = mongoose.model('Department', departmentSchema);
 const VisitApprove = mongoose.model('VisitApprove', visitApprove);
 const subscribtionRequest = mongoose.model('subscribtionRequest', subscribtionRequestSchema);
 module.exports = {
-  Patient,
-  Employee,
-  Doctor,
-  PatientHistory,
-  Entity,
-  User,
-  Visit,
-  Appointment,
-  Therapy,
-  RadioTest,
-  LabTest,
-  Drug,
-  Diagnosis,
-  Procedure,
-  InsuranceComp,
-  Policy,
-  Institute,
-  Department,
-  VisitApprove,
-  subscribtionRequest,
+    Patient,
+    Employee,
+    Doctor,
+    PatientHistory,
+    Entity,
+    User,
+    Visit,
+    Appointment,
+    Therapy,
+    RadioTest,
+    LabTest,
+    Drug,
+    Diagnosis,
+    Procedure,
+    InsuranceComp,
+    Policy,
+    Institute,
+    Department,
+    VisitApprove,
+    subscribtionRequest,
 };
