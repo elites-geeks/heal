@@ -20,10 +20,12 @@ patientRoute.get('/insurance', getInsuranceCompanies);
 async function reserveAppointmentHandler(req, res) {
     const { docid } = req.params;
     let { patientId, time, date } = req.body;
-    try{
+    try {
         const newAppoint = new db.Appointment({
             time,
-            date
+            date,
+            doctor: docid,
+            patient: patientId
         });
         const savedApp = await newAppoint.save();
         if (savedApp._id) {
@@ -37,11 +39,11 @@ async function reserveAppointmentHandler(req, res) {
                     appointmentList: newAppoint,
                 }
             });
-            res.status(201).json({savedApp, doctor,patient});
+            res.status(201).json({ savedApp, doctor, patient });
         } else {
             next("error while adding appointment")
         }
-    }catch(err){
+    } catch (err) {
         console.log(err.message)
     }
 
@@ -74,13 +76,13 @@ async function selfVisitHandler(req, res) {
 
 async function appointmentSearchHandler(req, res) {
     const { specialty, location, date } = req.body;
-    const docs = await db.Doctor.find({ specialty:specialty, clinicLocation:location });
+    const docs = await db.Doctor.find({ specialty: specialty, clinicLocation: location });
     const list = docs.filter(doc => {
         const dates = doc.appointmentList.map(appoint => {
-            return {date:appoint.date, time:appoint.time, status:appoint.status}
+            return { date: appoint.date, time: appoint.time, status: appoint.status }
         });
-        const {datee, time, status} = {datee:moment(date).format('YYYY-MM-DD'), time:moment(date).format('HH:00'), status:'new'}
-        if (dates.findIndex(elem=> elem.date===datee && elem.time===time && elem.status===status)>-1) {
+        const { datee, time, status } = { datee: moment(date).format('YYYY-MM-DD'), time: moment(date).format('HH:00'), status: 'new' }
+        if (dates.findIndex(elem => elem.date === datee && elem.time === time && elem.status === status) > -1) {
             return false;
         } else {
             return true;
@@ -128,16 +130,16 @@ async function activeProceduresHandler(req, res) {
 }
 async function appointmentGetHandler(req, res) {
     try {
-        let id = req.params.patientid;
-        let obj = await db.Appointment.find({ paitent: id });
-        let newObj = await Promise.all(obj.map(async (appointment) => {
-            let doctor = await db.Doctor.findById(appointment.doctor);
-            return { doctor: doctor, time: appointment.time, status: appointment.status, date: appointment.date };
+        const patientId = req.params.patientid;
+        const patient = await db.Patient.findById(patientId);
+        const appointments = patient.appointmentList.filter(elem => elem.status === "new")
+        const appointmentList = await Promise.all(appointments.map(async elem => {
+            const doc = await db.Doctor.findById(elem.doctor);
+            return { doc, elem }
         }));
-        res.status(200).json(newObj);
-
-    } catch (error) {
-        console.log(error);
+        res.status(200).json(appointmentList)
+    } catch (err) {
+        console.log(err.message)
     }
 }
 async function subscribeHandler(req, res) {

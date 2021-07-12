@@ -13,19 +13,18 @@ doctorRoute.post('/diagnosis/:visitid', writeDiagnosisHandler);
 
 
 async function getAppointmentHandler(req, res) {
-    console.log(Appointment);
-    const doctorId = req.params.docid;
-    const listOfAppointments = await Appointment.find({ doctor: doctorId, status: 'new' });
-    const output = await Promise.all(listOfAppointments.map(async appointment => {
-        const patient = await Patient.findById(appointment.patient);
-        let obj = {
-            time: appointment.time,
-            date: appointment.date,
-            patient: patient,
-        };
-        return obj;
-    }));
-    res.status(200).json(output);
+    try {
+        const doctorId = req.params.docid;
+        const doctor = await Doctor.findById(doctorId);
+        const appointments = doctor.appointmentList.filter(elem => elem.status === "new")
+        const appointmentList = await Promise.all(appointments.map(async elem => {
+            const patient = await Patient.findById(elem.patient);
+            return { patient, elem }
+        }));
+        res.status(200).json(appointmentList)
+    } catch (err) {
+        console.log(err.message)
+    }
 }
 
 async function writeDiagnosisHandler(req, res) {
